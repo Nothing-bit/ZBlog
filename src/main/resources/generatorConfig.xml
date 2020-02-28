@@ -16,8 +16,8 @@
 
         <!--数据库链接地址账号密码-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://127.0.0.1:3306/blog?characterEncoding=UTF-8" userId="root"
-                        password="1163959815">
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/blog?characterEncoding=UTF-8" userId=""
+                        password="">
         </jdbcConnection>
 
         <!--生成pojo类存放位置-->
