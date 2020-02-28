@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"  />
+    <meta charset="utf-8" />
+    <title>留言管理</title>
+
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="/admin/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/admin/assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+    <!-- page specific plugin styles -->
+    <link rel="stylesheet" href="/admin/assets/css/sweetalert.css" />
+    <link rel="stylesheet" href="/admin/assets/css/chosen.min.css" />
+    <!-- text fonts -->
+    <link rel="stylesheet" href="/admin/assets/css/fonts.googleapis.com.css" />
+
+    <!-- ace styles -->
+    <link rel="stylesheet" href="/admin/assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/admin/assets/css/ace-part2.min.css" class="ace-main-stylesheet"/>
+    <![endif]-->
+    <link rel="stylesheet" href="/admin/assets/css/ace-skins.min.css" />
+    <link rel="stylesheet" href="/admin/assets/css/ace-rtl.min.css" />
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/admin/assets/css/ace-ie.min.css"/>
+    <![endif]-->
+
+    <!-- inline styles related to this page -->
+
+    <!-- ace settings handler -->
+    <script src="/admin/assets/js/ace-extra.min.js"></script>
+
+    <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+    <!--[if lte IE 8]>
+    <script src="/admin/assets/js/html5shiv.min.js"></script>
+    <script src="/admin/assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="no-skin">
+<div id="navbar" class="navbar navbar-default     ace-save-state">
+    <div class="navbar-container ace-save-state" id="navbar-container">
+        <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+            <span class="sr-only">Toggle sidebar</span>
+
+            <span class="icon-bar"></span>
+
+            <span class="icon-bar"></span>
+
+            <span class="icon-bar"></span>
+        </button>
+
+        <div class="navbar-header pull-left">
+            <a href="/admin/index/page" class="navbar-brand">
+                <small>
+                    <i class="fa fa-leaf"></i>
+                    Blog 后台管理
+                </small>
+            </a>
+        </div>
+
+        <div class="navbar-buttons navbar-header pull-right" role="navigation">
+            <ul class="nav ace-nav">
+                <li class="light-blue dropdown-modal">
+                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                        <img class="nav-user-photo" src="/admin/assets/images/avatars/user.png" alt="Jason's Photo" />
+                        <span class="user-info">
+									<small>欢迎,</small>
+									管理员
+								</span>
+
+                        <i class="ace-icon fa fa-caret-down"></i>
+                    </a>
+
+                    <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+
+                        <li>
+                            <a href="#">
+                                <i class="ace-icon fa fa-power-off"></i>
+                                退出
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div><!-- /.navbar-container -->
+</div>
+
+<div class="main-container ace-save-state" id="main-container">
+    <script type="text/javascript">
+        try{ace.settings.loadState('main-container')}catch(e){}
+    </script>
+
+    <div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+        <script type="text/javascript">
+            try{ace.settings.loadState('sidebar')}catch(e){}
+        </script>
+
+        <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+            <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+                <button class="btn btn-success">
+                    <i class="ace-icon fa fa-signal"></i>
+                </button>
+
+                <button class="btn btn-info">
+                    <i class="ace-icon fa fa-pencil"></i>
+                </button>
+
+                <button class="btn btn-warning">
+                    <i class="ace-icon fa fa-users"></i>
+                </button>
+
+                <button class="btn btn-danger">
+                    <i class="ace-icon fa fa-cogs"></i>
+                </button>
+            </div>
+
+            <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+                <span class="btn btn-success"></span>
+
+                <span class="btn btn-info"></span>
+
+                <span class="btn btn-warning"></span>
+
+                <span class="btn btn-danger"></span>
+            </div>
+        </div><!-- /.sidebar-shortcuts -->
+
+        <ul class="nav nav-list">
+            <li class="">
+                <a href="/admin/index/page">
+                    <i class="menu-icon fa fa-home"></i>
+                    <span class="menu-text"> 首 页 </span>
+                </a>
+
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a href="/admin/article/page" >
+                    <i class="menu-icon fa fa-pencil-square-o"></i>
+                    <span class="menu-text"> 文章管理 </span>
+                </a>
+            </li>
+            <li class="">
+                <a href="/admin/category/page" >
+                    <i class="menu-icon fa fa-list"></i>
+                    <span class="menu-text"> 分类管理 </span>
+                </a>
+            </li>
+            <li class="">
+                <a href="/admin/tag/page" >
+                    <i class="menu-icon fa fa-tags"></i>
+                    <span class="menu-text"> 标签管理 </span>
+                </a>
+            </li>
+            <li class="">
+                <a href="/admin/article/comment/page" >
+                    <i class="menu-icon fa fa-comments-o"></i>
+                    <span class="menu-text"> 评论管理 </span>
+                </a>
+            </li>
+
+            <li class="active">
+                <a href="/admin/comment/page">
+                    <i class="menu-icon fa fa-envelope"></i>
+                    <span class="menu-text"> 留言管理 </span>
+                </a>
+            </li>
+
+            <li class="">
+                <a href="/admin/view/page">
+                    <i class="menu-icon fa fa-eye"></i>
+                    <span class="menu-text"> 访问记录 </span>
+                </a>
+            </li>
+
+            <li class="">
+                <a href="/admin/log/page">
+                    <i class="menu-icon fa fa-book"></i>
+                    <span class="menu-text"> 日志查看 </span>
+                </a>
+            </li>
+
+            <li class="">
+                <a href="/admin/setting/page">
+                    <i class="menu-icon fa fa-cog"></i>
+                    <span class="menu-text"> 设 置 </span>
+                </a>
+            </li>
+        </ul><!-- /.nav-list -->
+
+        <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+            <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="page-content">
+                <div class="row">
+                    <!--留言列表-->
+                    <div class="col-md-12" id="dataTableDiv">
+                        <h3 class="header smaller lighter blue">留言列表</h3>
+
+                        <div class="clearfix">
+                            <div class="pull-right tableTools-container"></div>
+                        </div>
+                        <!-- div.table-responsive -->
+
+                        <!-- div.dataTables_borderWrap -->
+                        <div>
+                            <table id="table" class="table table-striped table-bordered table-hover" style='text-align: center'>
+                                <thead>
+                                    <td><span>留言id</span></td>
+                                    <td><span>回复目标</span></td>
+                                    <td><span>昵称</span></td>
+                                    <td><span>来源</span></td>
+                                    <td><span>回复内容</span></td>
+                                    <td><span>回复时间</span></td>
+                                    <td><span>IP</span></td>
+                                    <td><span>是否有效</span></td>
+                                    <td><span>操作</span></td>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="modal fade" id="addCommentModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">回复留言</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="form-horizontal"role="form" onsubmit="submitArticleComment()">
+                                            <div class="form-group" >
+                                                <label class="col-md-4 control-label no-padding-right" >回复id: </label>
+                                                <div class="col-md-6">
+                                                    <input  type="text" id="targetIdAdd" disabled="disabled">
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label class="col-md-4 control-label no-padding-right">回复人: </label>
+                                                <div class="col-md-6">
+                                                    <input  type="text" id="targetNameAdd" disabled="disabled">
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label class="col-md-4 control-label no-padding-right" >内容: </label>
+                                                <div class="col-md-8">
+                                                    <textarea  id="contentAdd" rows="6" required="required"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer" style="text-align: center">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                                <button type="submit" class="btn btn-primary" onclick="submitComment()">提交</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE CONTENT ENDS -->
+            </div><!-- /.col -->
+        </div><!-- /.row --><!-- /.row -->
+    </div><!-- /.page-content -->
+</div>
+</div><!-- /.main-content -->
+
+<div class="footer">
+    <div class="footer-inner">
+        <div class="footer-content">
+						<span class="bigger-120">
+							<span class="blue bolder">ZhouJianGuo's Blog</span>
+							 &copy; 2019
+						</span>
+        </div>
+    </div>
+</div>
+
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+    <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+</a>
+</div><!-- /.main-container -->
+
+<!-- basic scripts -->
+
+<!--[if !IE]> -->
+<script src="/admin/assets/js/jquery-2.1.4.min.js"></script>
+
+<!-- <![endif]-->
+
+<!--[if IE]>
+<script src="/admin/assets/js/jquery-1.11.3.min.js"></script>
+<![endif]-->
+<script type="text/javascript">
+    if('ontouchstart' in document.documentElement) document.write("<script src='/admin/assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+</script>
+<script src="/admin/assets/js/bootstrap.min.js"></script>
+<!-- page specific plugin scripts -->
+<script src="/admin/assets/js/jquery.ui.touch-punch.min.js"></script>
+
+<!-- ace scripts -->
+<script src="/admin/assets/js/ace-elements.min.js"></script>
+<script src="/admin/assets/js/ace.min.js"></script>
+
+<!-- page specific plugin scripts -->
+<script src="/admin/assets/js/jquery.dataTables.min.js"></script>
+<script src="/admin/assets/js/jquery.dataTables.bootstrap.min.js"></script>
+<script src="/admin/assets/js/dataTables.buttons.min.js"></script>
+<script src="/admin/assets/js/buttons.flash.min.js"></script>
+<script src="/admin/assets/js/buttons.html5.min.js"></script>
+<script src="/admin/assets/js/buttons.print.min.js"></script>
+<script src="/admin/assets/js/buttons.colVis.min.js"></script>
+<script src="/admin/assets/js/dataTables.select.min.js"></script>
+<script src="/admin/assets/js/sweetalert-dev.js"></script>
+<script src="/admin/assets/js/vue.js"></script>
+<!--page sources scripts-->
+<script type="text/javascript">
+    // 初始化留言表格
+    var dataTable = $('#table').DataTable( {
+        jQueryUI: true,
+        autoWidth:false,
+        destroy:true,
+        lengthMenu: [ 5, 10, 20 ],
+        ordering:false,
+        searching:false,
+        serverSide:true,
+        ajax:{
+            url:'/admin/comment/list',
+            type:'get',
+        },
+        columns:[
+            {data:'id'},
+            {data:'targetId'},
+            {data:'username'},
+            {data:'source'},
+            {data:'content'},
+            {data:'createBy'},
+            {data:'ip'},
+            {data:'effective'}
+        ],
+        columnDefs:[
+            {
+                targets:7,
+                render:function (data) {
+                    var html=""
+                    if(data==true){
+                        html+="<span class='label label-success'>有效</span>"
+                    }else{
+                        html+="<span class='label label-danger'>无效</span>"
+                    }
+                    return html
+                }
+            },
+            {
+                targets:8,
+                render:function (data, type, row, meta) {
+                    var html="<div class='hidden-sm hidden-xs action-buttons'>\
+                                <a class='blue'  onclick='addComment("+JSON.stringify(row)+")'><i class='ace-icon fa fa-reply bigger-130'></i></a>\
+                                <a class='green' onclick='enableComment("+row.id+")'><i class='ace-icon   glyphicon glyphicon-ok bigger-130'></i></a>\
+                                <a class='red'   onclick='disableComment("+row.id+")'><i class='ace-icon glyphicon glyphicon-remove bigger-130'></i></a>\
+                                <a class='red'   onclick='deleteComment("+row.id+")'><i class='ace-icon glyphicon glyphicon-trash bigger-130'></i></a>\
+                            </div>"
+                    return html
+                }
+            }
+        ],
+        language:{
+            "decimal":        "",
+            "emptyTable":     "空数据",
+            "info":           "当前为第 _START_ 到 _END_ 条数据,总共 _TOTAL_ 条数据",
+            "infoEmpty":      "当前显示 0 条数据",
+            "infoFiltered":   "(总共 _MAX_ 条数据)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "显示 _MENU_ 条数据",
+            "loadingRecords": "加载中...",
+            "processing":     "处理中...",
+            "search":         "查找:",
+            "zeroRecords":    "未能找到相关数据",
+            "paginate": {
+                "first":      "首页",
+                "last":       "末页",
+                "next":       "下一页",
+                "previous":   "上一页"
+            },
+            "aria": {
+                "sortAscending":  ": activate to sort column ascending",
+                "sortDescending": ": activate to sort column descending"
+            }
+        }
+    } );
+    //初始化回复留言模态框
+    function addComment(item) {
+        $("#addCommentModal").modal();
+        $("#targetIdAdd").val(item.id);
+        $("#targetNameAdd").val(item.username);
+
+    }
+    //提交回复
+    function submitComment() {
+        event.preventDefault();
+        var req={};
+        req.targetId=$("#targetIdAdd").val();
+        req.content=$("#contentAdd").val();
+        req.userId=2;
+        $.ajax({
+            data:JSON.stringify(req),
+            dataType:'json',
+            contentType:'application/json',
+            type:'post',
+            url:'/admin/comment',
+            success:function (result) {
+                // alert(JSON.stringify(result))
+                if(result.code==200){
+                    swal("提示","回复成功！","success")
+                    $("#addCommentModal").modal("hide")
+                    dataTable.ajax.reload();
+                }
+            }
+        })
+    }
+    //恢复留言
+    function enableComment(id) {
+        $.ajax({
+            type:'put',
+            url:'/admin/comment/'+id,
+            dataType:'json',
+            success:function (result) {
+                if(result.code==200){
+                    swal("提示","审核通过id为"+id+"的留言成功！","success")
+                    dataTable.ajax.reload();
+                }
+            }
+        })
+    }
+    //使留言失效
+    function disableComment (id) {
+        $.ajax({
+            type:'put',
+            url:'/admin/comment/disable/'+id,
+            dataType:'json',
+            success:function (result) {
+                if(result.code==200){
+                    swal("提示","隐藏id为"+id+"的留言成功！","success")
+                    dataTable.ajax.reload();
+                }
+            }
+        })
+    }
+    //删除留言
+    function  deleteComment(id) {
+        swal({
+            title:'注意',
+            text:"即将删除id为:"+id+"的留言，子留言也会全部被删除！",
+            type:'warning',
+            showCancelButton:true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "删除！",
+            cancelButtonText: "算了算了~",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },function(isConfirm){
+            if (isConfirm) {
+                $.ajax({
+                    type:'delete',
+                    url:'/admin/comment/'+id,
+                    dataType:'json',
+                    success:function (result) {
+                        if(result.code==200){
+                            swal("提示","删除id为"+id+"的留言成功！","success")
+                            dataTable.ajax.reload();
+                        }
+                    }
+                })
+            }})
+    }
+</script>
+</body>
+</html>

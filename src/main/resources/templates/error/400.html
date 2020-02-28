@@ -1,0 +1,39 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>出错啦</title>
+    <link rel="stylesheet" href="/fore/assets/css/layui.css">
+    <link rel="icon" href="/fore/assets/images/favicon.ico" type="icon">
+    <link rel="stylesheet" href="/fore/assets/icon/iconfont.css">
+</head>
+<body class="layui-bg-gray">
+<!--导航栏-->
+<div class="layui-row ">
+    <ul class="layui-nav layui-icon-align-center" style="text-align: center;">
+        <li class="layui-nav-item "><a href="/fore/index/page"  style="font-size: 17px;"><i class="layui-icon layui-icon-home" style="padding-right: 5px;"></i>主页</a></li>
+        <li class="layui-nav-item "><a href="/fore/category/page" style="font-size: 17px;"><i class="layui-icon layui-icon-app" style="padding-right: 5px;"></i>分类</a></li>
+        <li class="layui-nav-item "><a href="/fore/tag/page" style="font-size: 17px;"><i class="layui-icon layui-icon-note" style="padding-right: 5px;"></i>标签</a></li>
+        <li class="layui-nav-item "><a href="/fore/archive/page" style="font-size: 17px;"><i class="layui-icon layui-icon-chart" style="padding-right: 5px;"></i>归档</a></li>
+        <li class="layui-nav-item layui-this"><a href="/fore/about/page" style="font-size: 17px;"><i class="layui-icon layui-icon-more" style="padding-right: 5px;"></i>关于</a></li>
+    </ul>
+</div>
+<!--主体-->
+<div class="layui-row " style="padding-top: 20px;padding-bottom: 20px;">
+    <div class="layui-col-lg10 layui-col-lg-offset1" style="padding: 10px;">
+        <!--概述-->
+        <div class="layui-card layui-anim layui-anim-scaleSpring" style="text-align: center;padding: 50px;">
+            <img src="/fore/assets/images/errorPage/404.png" >
+            <h2>海面雾气太大</h2><h2>受天气影响，该页无法正常显示</h2>
+            <h5> 你可以 <a href="/fore/index/page">返回主页</a> 。</h5>
+            <img src="/fore/assets/images/errorPage/error-bg.png" style="padding:20px 0 60px;">
+        </div>
+    </div>
+</div>
+<!--页脚-->
+<div class="layui-row layui-bg-black " style="height: 100px;" >
+    <div class="layui-col-lg4 layui-col-lg-offset4" style="padding: 20px;text-align: center"><span >@CopyRight 2019 ZhouJianGuo版权所有</span></div>
+</div>
+<!--script配置-->
+<script opacity="0.9"  src="/fore/assets/js/canvas-nest.js"></script>
+</body>
+</html>

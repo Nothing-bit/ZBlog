@@ -1,0 +1,452 @@
+﻿<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>我的学习记录</title>
+    <link rel="stylesheet" href="/fore/assets/css/layui.css">
+    <link rel="icon" href="/fore/assets/images/favicon.ico" type="icon">
+    <link rel="stylesheet" href="/fore/assets/icon/iconfont.css">
+    <style>
+        .icon {
+            width: 1em;
+            height: 1em;
+            vertical-align: -0.15em;
+            fill: currentColor;
+            overflow: hidden;
+        }
+        img:hover {
+            -webkit-transform: scale(1.05);
+            -moz-transform: scale(1.05);
+            -ms-transform: scale(1.05);
+            -o-transform: scale(1.05);
+            transform: scale(1.05);
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="layui-bg-gray" >
+<!--导航栏-->
+    <div class="layui-row ">
+        <ul class="layui-nav layui-icon-align-center" style="text-align: center;">
+            <li class="layui-nav-item layui-this"><a href="/fore/index/page"  style="font-size: 17px;"><i class="layui-icon layui-icon-home" style="padding-right: 5px;"></i>主页</a></li>
+            <li class="layui-nav-item "><a href="/fore/category/page" style="font-size: 17px;"><i class="layui-icon layui-icon-app" style="padding-right: 5px;"></i>分类</a></li>
+            <li class="layui-nav-item "><a href="/fore/tag/page" style="font-size: 17px;"><i class="layui-icon layui-icon-note" style="padding-right: 5px;"></i>标签</a></li>
+            <li class="layui-nav-item "><a href="/fore/archive/page" style="font-size: 17px;"><i class="layui-icon layui-icon-chart" style="padding-right: 5px;"></i>归档</a></li>
+            <li class="layui-nav-item "><a href="/fore/about/page" style="font-size: 17px;"><i class="layui-icon layui-icon-more" style="padding-right: 5px;"></i>关于</a></li>
+        </ul>
+    </div>
+<!--主体-->
+    <div class="layui-row " style="padding: 20px;">
+        <!--第一列-->
+        <div class="layui-col-lg3 " style="padding: 10px;">
+            <!--个人名片-->
+            <div class="layui-card layui-anim layui-anim-upbit" >
+                <div class="layui-card-body" >
+                    <div class="layui-row" style="text-align: center">
+                        <div class="layui-row layui-anim layui-anim-scaleSpring"style="padding-top: 20px" >
+                            <img src="/fore/assets/images/headPic.png" style="height:120px;width: 120px;border-radius: 8px;">
+                        </div>
+                        <div class="layui-row" style="padding-top: 15px;">
+                            <h2>ZhouJianGuo</h2>
+                        </div>
+                        <div class="layui-row" style="padding-top: 5px;">
+                            <span>A student learning Computer Technology</span>
+                        </div>
+                        <div class="layui-row" style="padding: 5px;">
+                            <span><i class="layui-icon layui-icon-location" style="color: blue"></i>中国·南京</span>
+                        </div>
+                        <hr class="layui-bg-gray">
+                        <div class="layui-row ">
+                            <div class="layui-col-lg3 layui-col-lg-offset3">
+                                <a href="https://www.zhihu.com/people/zhou-xiao-jun-3-75/activities"><img src="/fore/assets/images/third-logo/zhihu.png" id="zhihu"></a>
+                            </div>
+                            <div class="layui-col-lg3">
+                                <a href="https://github.com/Nothing-bit" ><img src="/fore/assets/images/third-logo/github.png" id="github"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!--            公告-->
+            <div class="layui-card">
+               <div class="layui-card-body" >
+                   <fieldset class="layui-elem-field">
+                       <legend><i class="layui-icon layui-icon-speaker" style="color:rgb(0, 153, 255)"></i>公告</legend>
+                       <div class="layui-field-box">
+                           <span id="notice"></span>
+                       </div>
+                   </fieldset>
+               </div>
+            </div>
+<!--            天气预报-->
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <fieldset class="layui-elem-field">
+                        <legend><i class="iconfont icon-qixiangtubiao-wubeijing-" style="font-size: 20px;"></i>天气</legend>
+                        <div id="he-plugin-standard"></div>
+                        <script>
+                            WIDGET = {
+                                CONFIG: {
+                                    "layout": 2,
+                                    "width": "310",
+                                    "height": "270",
+                                    "background": 2,
+                                    "dataColor": "4A4A4A",
+                                    "key": "81155d3eb5734466a2a6aed118100eb2"
+                                }
+                            }
+                        </script>
+                        <script src="https://widget.heweather.net/standard/static/js/he-standard-common.js?v=1.1"></script>
+                    </fieldset>
+                </div>
+            </div>
+<!--            评论轮播-->
+            <div class="layui-card">
+                <div class="layui-card-body" >
+                    <fieldset class="layui-elem-field">
+                        <legend><i class="layui-icon layui-icon-reply-fill" style="color:rgb(102, 204, 255)"></i>最新评论</legend>
+                        <div class="layui-field-box">
+                            <div class="layui-carousel" id="articleCommentCarousel">
+                                <div carousel-item="" class="layui-row">
+                                    <div  th:each="item:${latestArticleComment}" style="background-color: white">
+                                        <div class="layui-col-lg12" style="padding: 5px;text-align: center">
+                                            <a style="color: rgb(0,132,255)" th:href="@{'/fore/article/page/'+${item.articleId}}" th:text="${item.title}"></a>
+                                        </div>
+                                        <div class="layui-col-lg2">
+                                            <img style="width: 30px;" class="layui-circle" th:src="${item.avatar}">
+                                        </div>
+                                        <div class="layui-col-lg4">
+                                            <span th:text="${item.username}" style="color:rgb(0,150,136)"></span>
+                                        </div>
+                                        <div class="layui-col-lg6" style="text-align: center">
+                                            <span class="timeago" th:datetime="${#dates.format(item.createBy,'yyyy-MM-dd HH:mm:ss')}"></span>
+                                        </div>
+                                        <div class="layui-col-lg12" style="padding-left: 40px;padding-right: 40px;overflow: hidden;text-overflow: ellipsis;">
+                                            <span th:text="${item.content}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+<!--            留言轮播-->
+            <div class="layui-card">
+                <div class="layui-card-body" >
+                    <fieldset class="layui-elem-field">
+                        <legend><i class="layui-icon layui-icon-reply-fill" style="color:rgb(153, 255, 204)"></i>最新留言</legend>
+                        <div class="layui-field-box">
+                            <div class="layui-carousel" id="commentCarousel">
+                                <div carousel-item="" class="layui-row">
+                                    <div  th:each="item:${latestComment}" style="background-color: white">
+                                        <div class="layui-col-lg2">
+                                            <img style="width: 30px;" class="layui-circle" th:src="${item.avatar}">
+                                        </div>
+                                        <div class="layui-col-lg4">
+                                            <span th:text="${item.username}" style="color:rgb(0,150,136)"></span>
+                                        </div>
+                                        <div class="layui-col-lg6" style="text-align: center">
+                                            <span class="timeago" th:datetime="${#dates.format(item.createBy,'yyyy-MM-dd HH:mm:ss')}"></span>
+                                        </div>
+                                        <div class="layui-col-lg12" style="padding-left: 40px;padding-right: 40px;overflow: hidden;text-overflow: ellipsis;">
+                                            <span th:text="${item.content}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        <!--第二列-->
+        <div class="layui-col-lg6 " style="padding: 10px;" >
+            <div class="layui-row" id="previewModule" style="display: none">
+                <!--简略信息模块-->
+                <div class="layui-card layui-anim layui-anim-fadein" v-for="item in items" >
+                    <div class="layui-card-header">
+                        <div class="layui-row">
+                            <div class="layui-col-lg2">
+                                <i class="iconfont icon-zhiding" style="font-size: 25px; color: #5882FA" v-if="item.top" ></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-card-body">
+                        <div class="layui-row">
+                            <div class="layui-col-lg5" style="text-align: center">
+                                <a v-bind:href="'/fore/article/page/'+item.id">
+                                    <img v-bind:src="item.pictureUrl" style="width: 250px;" >
+                                </a>
+                            </div>
+                            <div class="layui-col-lg7" style="padding:10px;">
+                                <div class="layui-row" style="padding:10px;">
+                                    <h1 style="line-height: 30px;">{{item.title}}</h1>
+                                </div>
+                                <div class="layui-row" style="padding:10px;">
+                                    <div class="layui-col-lg4">
+                                        <i class="layui-icon layui-icon-app" style="padding-right: 10px;"></i><span>{{item.categoryName}}</span>
+                                    </div>
+                                    <div class="layui-col-lg4 ">
+                                        <i class="layui-icon layui-icon-date" style="padding-right: 10px;"></i><span>{{item.createBy}}</span>
+                                    </div>
+                                    <div class="layui-col-lg4">
+                                        <i class="iconfont icon-eye" style="padding-right: 10px;"></i><span>{{item.traffic}}</span>
+                                    </div>
+                                </div>
+                                <div class="layui-row" style="padding:10px;">
+                                    <p>{{item.summary}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="layui-bg-gray">
+                        <div class="layui-row">
+                            <div class="layui-col-lg10">
+                                <div class="layui-btn-container">
+                                    <i class="layui-icon layui-icon-note" style="padding-right: 10px;"></i>
+                                    <a class="layui-btn layui-btn-primary" v-for="tagItem in item.tagList" v-bind:href="'/fore/article/tag/page?tagName='+tagItem">{{tagItem}}</a>
+                                </div>
+                            </div>
+                            <div class="layui-col-lg2 " style="text-align: right">
+                                <a class="layui-btn layui-btn-primary" v-bind:href="'/fore/article/page/'+item.id">阅读详情<i class="layui-icon layui-icon-right" style="color: #00BE67"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-card">
+                    <div class="layui-card-body" id="pageSpliterDiv" style="display: none">
+                        <div id="pageSpliter" style="text-align: center ;" ></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--第三列-->
+        <div class="layui-col-lg3"style="padding: 10px;">
+            <!--点击Top-->
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <fieldset class="layui-elem-field">
+                        <legend><i style="color:rgb(255,100,100)" class="iconfont icon-eye"></i>阅读最多</legend>
+                        <div class="layui-field-box" th:each="item,state:${topPageInfo.list}" th:switch="${state.index}">
+                            <svg th:case="0" class="icon " aria-hidden="true" style="font-size: 25px;">
+                                <use xlink:href="#icon-NO"></use>
+                            </svg>
+                            <svg th:case="1" class="icon " aria-hidden="true" style="font-size: 25px;">
+                                <use xlink:href="#icon-NO2"></use>
+                            </svg>
+                            <svg th:case="2" class="icon " aria-hidden="true" style="font-size: 25px;">
+                                <use xlink:href="#icon-NO1"></use>
+                            </svg>
+                            <i th:case="*" class="iconfont icon-NO" style="font-size: 25px;"></i>
+                            <a th:href="@{'/fore/article/page/'+${item.id}}"><span th:text="${item.title}" style="padding-left: 10px;"></span></a>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <!--标签云-->
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <fieldset class="layui-elem-field">
+                        <legend><i style="color: rgb(95,184,120)" class="layui-icon layui-icon-note"></i>热门标签</legend>
+                        <div class="layui-field-box">
+                            <div class="layui-btn-container">
+                                <!--<div   style="padding: 5px;">-->
+                                <!--</div>-->
+                                <a th:each="item:${tagList}" class="layui-btn layui-btn-primary" th:text="${item.name}" th:href="@{'/fore/article/tag/page?tagName='+${item.name}}"></a>
+                                <a class="layui-btn layui-btn-normal" href="/fore/tag/page">更多标签</a>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <!--友链-->
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <fieldset class="layui-elem-field">
+                        <legend><i style="color: rgb(0,132,255)" class="layui-icon layui-icon-link"></i>友情链接</legend>
+                        <div class="layui-field-box">
+                            <div class="layui-btn-container">
+                                <a class="layui-btn layui-btn-primary" href="https://blog.schwarzeni.com/"><i class="layui-icon layui-icon-link" style="color: rgb(0,132,255)"></i>Schwarzeni</a>
+                                <a class="layui-btn layui-btn-primary" href="https://zybtree.github.io/"><i class="layui-icon layui-icon-link" style="color: rgb(0,132,255)"></i>zybTree</a>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <!--网站状态面板-->
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <fieldset class="layui-elem-field">
+                        <legend><i style="color:rgb(0,150,136)" class="layui-icon layui-icon-console"></i>站点信息</legend>
+                        <div class="layui-field-box">
+                            <span  th:text="'日志数量：'+${countArticle}+'篇'"></span>
+                            <br>
+                            <span th:text="'分类数量：'+${countCategory}+'个'"></span>
+                            <br>
+                            <span th:text="'标签数量：'+${countTag}+'个'"></span>
+                            <br>
+                            <span id="sitetime"></span>
+                            <br>
+                            <span>最近更新时间：2020年2月13日17:29:18</span>
+
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--页脚-->
+    <div class="layui-row layui-bg-black" style="height: 100px;" >
+        <div class="layui-col-lg4 layui-col-lg-offset4" style="padding: 20px;text-align: center;line-height: 25px;">
+            <span >@CopyRight 2019 ZhouJianGuo版权所有</span>
+            <br>
+            <a href="http://beian.miit.gov.cn"><span style="color: white">苏ICP备19061991号</span></a>
+        </div>
+    </div>
+<!--script配置-->
+    <script opacity="0.9"  src="/fore/assets/js/canvas-nest.js" ></script>
+    <script src="/fore/assets/icon/iconfont.js"></script>
+    <script src="/fore/assets/layui.js"></script>
+    <script src="/fore/assets/js/vue.js"></script>
+    <script language=javascript>
+        function siteTime(){
+            window.setTimeout("siteTime()", 1000);
+            var seconds = 1000;
+            var minutes = seconds * 60;
+            var hours = minutes * 60;
+            var days = hours * 24;
+            var years = days * 365;
+            var today = new Date();
+            var todayYear = today.getFullYear();
+            var todayMonth = today.getMonth()+1;
+            var todayDate = today.getDate();
+            var todayHour = today.getHours();
+            var todayMinute = today.getMinutes();
+            var todaySecond = today.getSeconds();
+            /* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
+            year - 作为date对象的年份，为4位年份值
+            month - 0-11之间的整数，做为date对象的月份
+            day - 1-31之间的整数，做为date对象的天数
+            hours - 0(午夜24点)-23之间的整数，做为date对象的小时数
+            minutes - 0-59之间的整数，做为date对象的分钟数
+            seconds - 0-59之间的整数，做为date对象的秒数
+            microseconds - 0-999之间的整数，做为date对象的毫秒数 */
+            var t1 = Date.UTC(2019,9,01,00,00,00); //北京时间2016-12-1 00:00:00
+            var t2 = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+            var diff = t2-t1;
+            var diffYears = Math.floor(diff/years);
+            var diffDays = Math.floor((diff/days)-diffYears*365);
+            var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+            var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+            var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+            document.getElementById("sitetime").innerHTML="本站已运行："+diffYears+" 年 "+diffDays+" 天 "+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒";
+        }
+        siteTime();
+    </script>
+    <script>
+        //注意：导航 依赖 element 模块，否则无法进行功能性操作
+        layui.config({
+            version: true,
+            base:  '/fore/assets/lay/modules/'
+        }).extend({
+            timeago: 'timeago'})
+            .use(['element','util','laypage','jquery','layer','carousel','timeago'], function(){
+            var util=layui.util;
+            var laypage=layui.laypage;
+            var $=layui.jquery;
+            var layer=layui.layer;
+            var carousel=layui.carousel;
+            //右下角工具按钮
+            util.fixbar({
+                top:true,
+                css: { right: 15, bottom: 35 },
+                bgcolor: '#A4A4A4',
+                showHeight:100,
+            })
+            //第三方logo提示
+            $("#zhihu").mouseover(function () {
+                layer.tips('知乎','#zhihu',{tips:1})
+            })
+            $("#github").mouseover(function () {
+                layer.tips('GitHub','#github',{tips:1})
+            })
+            //分页
+            var total=[[${total}]]
+            var pageSize=[[${pageSize}]]
+            var pageNum=1
+            var previewModule=null;
+            laypage.render({
+                elem:'pageSpliter',
+                curr:pageNum,
+                count:total,
+                limit:pageSize,
+                jump:function (obj,first) {
+                    $("#previewModule").fadeOut()
+                    $.ajax({
+                        type:'get',
+                        dataType:'json',
+                        url:'/fore/article/list/'+obj.curr,
+                        them:'blue',
+                        success:function (result) {
+                           // layer.msg(JSON.stringify(result))
+                            if (result.code==200){
+                                if(first){
+                                    $("#pageSpliterDiv").fadeIn()
+                                    previewModule=new Vue({
+                                        el:'#previewModule',
+                                        data:{
+                                            items:result.pageInfo.list
+                                        }
+                                    })
+                                }else{
+                                    previewModule.items=result.pageInfo.list
+                                }
+                                $("html,body").animate({scrollTop:0},200);
+                                $("#previewModule").fadeIn()
+                            }else{
+                                layer.msg('系统异常，请稍后重试~~~',{icon: 5})
+                            }
+                        }
+                    })
+                }
+            })
+            //留言轮播
+            carousel.render({
+                elem: '#commentCarousel',
+                width: '100%',
+                anim:'updown',
+                interval:5000,
+                arrow:'none',
+                indicator:'none',
+                height:'100px'
+            });
+            //评论轮播
+            carousel.render({
+                elem: '#articleCommentCarousel',
+                width: '100%',
+                anim:'updown',
+                interval:5000,
+                arrow:'none',
+                indicator:'none',
+                height:'150px'
+            });
+            //初始化公告
+                $.ajax({
+                    type:'get',
+                    dataType:'json',
+                    url:'/fore/notice',
+                    success:function (result) {
+                        if(result.code==200){
+                            $("#notice").text(result.data)
+                        }
+                    }
+                })
+            //事件转换
+            var timeago = layui.timeago;
+            timeago.render($('.timeago'));
+        });
+    </script>
+</body>
+
+</html>
