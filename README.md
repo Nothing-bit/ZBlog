@@ -30,14 +30,15 @@ blog.mail.from=
 --------后台管理系统登录密码------  
 admin.username=  
 admin.password=
+
 选配参数：
----------第三方登录-------（若不配置，则无法实现第三方登录）
+---------第三方登录-------
 justauth.type.QQ.client-id=  
 justauth.type.QQ.client-secret=  
 justauth.type.QQ.redirect-uri=  
 justauth.type.github.client-id=  
 justauth.type.github.client-secret=  
-justauth.type.github.redirect-uri
+justauth.type.github.redirect-uri=
 ----------ssl配置---------  
 ssl证书路径  
 server.ssl.key-store=  
