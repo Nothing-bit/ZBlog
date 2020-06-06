@@ -2,9 +2,10 @@
 一款轻量级的个人博客系统，基于SpringBoot 2.13，融合了hutool，Ckeditor，PageHelper,JustAuth等工具，可以让写blog变得和写word文档一样舒服！
 # 版本信息
 **V1.2**  2020年2月28日 修复后台管理首页数据统计日期不正常的Bug
+**V1.3**  2020年6月4日  前台：添加标签云，更新归档页面，更新留言、评论逻辑，后台：dataTable支持查询功能，dataTable添加高亮显示，新增Ip归属地查询 数据库：表结构更新
 # 引导
 
-下面是ZJGBlog的快速引导，能够帮助你跑起该项目。
+下面是ZBlog的快速引导，能够帮助你跑起该项目。
 
 # 运行环境
 JDK 1.8.121 x64 
@@ -48,7 +49,7 @@ server.ssl.key-store-password=
 server.ssl.key-store-type=
 ## BlogApplication.java
 代码注释为https访问用，如果配置了ssl证书，需要将注释去掉
-## Swagger2.java
+## SwaggerConfig.java
 代码注释为调试api接口用，如果需要调试接口，请取消注释代码，并在浏览器内输入以下url:[https://localhost:8080/swagger-ui.html](https://localhost/swagger-ui.html)
 （建议先打开，然后访问以方便查看网站接口情况）
 # 其他
@@ -56,4 +57,4 @@ SSL证书配置教程以及邮箱配置在我的个人主页有教程，可直�
 如果本项目对你有所帮助，请star，你的支持是本项目日后优化和进步的最大动力！
 有任何问题或者建议，你可以加入QQ群：828944177进行交流。
 请勿用于商业用途，仅供参考学习!
-本文更新于：2020年2月28日18:14:16
+本文更新于：2020年6月6日10:03:34
