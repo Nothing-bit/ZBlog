@@ -42,11 +42,11 @@
             <!--<property name="useActualColumnNames" value="false"/>-->
             <!--<generatedKey column="id" sqlStatement="JDBC"/>-->
         <!--</table>-->
-        <!--<table tableName="sys_view" domainObjectName="SysView" >-->
-            <!--<property name="my.isgen.usekeys" value="true"/>-->
-            <!--<property name="useActualColumnNames" value="false"/>-->
-            <!--<generatedKey column="id" sqlStatement="JDBC"/>-->
-        <!--</table>-->
+<!--        <table tableName="sys_view" domainObjectName="SysView" >-->
+<!--            <property name="my.isgen.usekeys" value="true"/>-->
+<!--            <property name="useActualColumnNames" value="false"/>-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--        </table>-->
         <!--<table tableName="tbl_article_info" domainObjectName="ArticleInfo" enableCountByExample="true"-->
                <!--enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="true"-->
                <!--selectByExampleQueryId="false">-->
@@ -70,18 +70,18 @@
         <!--<property name="useActualColumnNames" value="false"/>-->
         <!--<generatedKey column="id" sqlStatement="JDBC"/>-->
         <!--</table>-->
-        <!--<table tableName="tbl_article_comment" domainObjectName="ArticleComment">-->
-            <!--<property name="my.isgen.usekeys" value="true"/>-->
-            <!--<property name="useActualColumnNames" value="false"/>-->
-            <!--<generatedKey column="id" sqlStatement="JDBC"/>-->
-            <!--<columnRenamingRule searchString="is_" replaceString=""/>-->
-        <!--</table>-->
-        <!--<table tableName="tbl_comment" domainObjectName="Comment" >-->
-            <!--<property name="my.isgen.usekeys" value="false"/>-->
-            <!--<property name="useActualColumnNames" value="false"/>-->
-            <!--<generatedKey column="id" sqlStatement="JDBC"/>-->
-            <!--<columnRenamingRule searchString="is_" replaceString=""/>-->
-        <!--</table>-->
+        <table tableName="tbl_article_comment" domainObjectName="ArticleComment">
+            <property name="my.isgen.usekeys" value="true"/>
+            <property name="useActualColumnNames" value="false"/>
+            <generatedKey column="id" sqlStatement="JDBC"/>
+            <columnRenamingRule searchString="is_" replaceString=""/>
+        </table>
+<!--        <table tableName="tbl_comment" domainObjectName="Comment" >-->
+<!--            <property name="my.isgen.usekeys" value="false"/>-->
+<!--            <property name="useActualColumnNames" value="false"/>-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnRenamingRule searchString="is_" replaceString=""/>-->
+<!--        </table>-->
 <!--        <table tableName="tbl_user_info" domainObjectName="UserInfo" >-->
 <!--            <property name="my.isgen.usekeys" value="false"/>-->
 <!--            <property name="useActualColumnNames" value="false"/>-->
@@ -109,11 +109,11 @@
             <!--<property name="useActualColumnNames" value="false"/>-->
             <!--<generatedKey column="id" sqlStatement="JDBC"/>-->
         <!--</table>-->
-        <table tableName="sys_setting" domainObjectName="SysSetting" >
-            <property name="my.isgen.usekeys" value="true"/>
-            <property name="useActualColumnNames" value="false"/>
-            <generatedKey column="id" sqlStatement="JDBC"/>
-            <columnRenamingRule searchString="is_" replaceString=""/>
-        </table>
+<!--        <table tableName="sys_setting" domainObjectName="SysSetting" >-->
+<!--            <property name="my.isgen.usekeys" value="true"/>-->
+<!--            <property name="useActualColumnNames" value="false"/>-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnRenamingRule searchString="is_" replaceString=""/>-->
+<!--        </table>-->
     </context>
 </generatorConfiguration>

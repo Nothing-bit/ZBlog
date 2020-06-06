@@ -28,7 +28,7 @@ public class BlogApplication {
 //        tomcat.addAdditionalTomcatConnectors(httpConnector());
 //        return tomcat;
 //    }
-
+//
 //    @Bean
 //    public Connector httpConnector() {
 //        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
