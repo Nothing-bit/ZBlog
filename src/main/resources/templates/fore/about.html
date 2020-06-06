@@ -5,21 +5,33 @@
     <link rel="stylesheet" href="/fore/assets/css/layui.css">
     <link rel="icon" href="/fore/assets/images/favicon.ico" type="icon">
     <link rel="stylesheet" href="/fore/assets/icon/iconfont.css">
+    <link rel="stylesheet" href="/fore/assets/css/animate.css">
+    <style>
+        .list-complete-item {
+            transition: all 1s;
+        }
+        .list-complete-leave-to {
+            display: none;
+        }
+        .list-complete-leave-active {
+            position: absolute;
+        }
+    </style>
 </head>
 <body class="layui-bg-gray">
 <!--导航栏-->
 <div class="layui-row ">
     <ul class="layui-nav layui-icon-align-center" style="text-align: center;">
         <li class="layui-nav-item "><a href="/fore/index/page"  style="font-size: 17px;"><i class="layui-icon layui-icon-home" style="padding-right: 5px;"></i>主页</a></li>
-        <li class="layui-nav-item "><a href="/fore/category/page" style="font-size: 17px;"><i class="layui-icon layui-icon-app" style="padding-right: 5px;"></i>分类</a></li>
+        <li class="layui-nav-item "><a href="/fore/category/page/0" style="font-size: 17px;"><i class="layui-icon layui-icon-app" style="padding-right: 5px;"></i>分类</a></li>
         <li class="layui-nav-item "><a href="/fore/tag/page" style="font-size: 17px;"><i class="layui-icon layui-icon-note" style="padding-right: 5px;"></i>标签</a></li>
-        <li class="layui-nav-item "><a href="/fore/archive/page" style="font-size: 17px;"><i class="layui-icon layui-icon-chart" style="padding-right: 5px;"></i>归档</a></li>
+        <li class="layui-nav-item "><a href="/fore/archive/page?month=all" style="font-size: 17px;"><i class="layui-icon layui-icon-date" style="padding-right: 5px;"></i>归档</a></li>
         <li class="layui-nav-item layui-this"><a href="/fore/about/page" style="font-size: 17px;"><i class="layui-icon layui-icon-more" style="padding-right: 5px;"></i>关于</a></li>
     </ul>
 </div>
 <!--主体-->
 <div class="layui-row " style="padding-top: 20px;padding-bottom: 20px;">
-    <div class="layui-col-lg8 layui-col-lg-offset2" style="padding: 10px;">
+    <div class="layui-col-lg10 layui-col-lg-offset1" style="padding: 10px;">
             <!--概述-->
             <div class="layui-card layui-anim layui-anim-scaleSpring" >
                 <div class="layui-card-body" style="padding: 20px;line-height: 35px;">
@@ -28,7 +40,7 @@
                     </blockquote>
                     <fieldset class="layui-elem-field">
                         <div class="layui-field-box">
-                            <span>一名双非本科、在校双非硕士研究生，由于记忆力不太好，就写了个人网站进行学习记录。</span>
+                            <span>一名在校学生，由于记忆力不太好，就写了个人网站进行学习记录。</span>
                             <br>
                             <span></span>
                         </div>
@@ -38,14 +50,18 @@
                     </blockquote>
                     <fieldset class="layui-elem-field">
                         <div class="layui-field-box">
-                            <span>前端：基于Layui，自主设计和排版，没有用模板。或许有些丑，但是简洁一点看着更清爽。</span>
-                            <br>
-                            <span>后端：Spring Boot 2.1.7</span>
-                            <br>
-                            <span>一开始使用了Bootstrap模板，奈何模板的灵活性实在太差，并且无法接受轻奢风格，所以前端推倒重来。</span>
-                            <br>
                             <span>主要是想系统性地学习一次SpringBoot，所以没采用静态博客方案。</span>
                             <br>
+                            <span>使用了Thymeleaf,没有彻底前后端分离。</span>
+                            <br>
+                            <span>Tip:如果只是想单纯的做笔记用，推荐使用hexo模板，不需要部署服务器，买个域名即可。</span>
+                            <br>
+                            <span>Powered by:</span>
+                            <img src="/fore/assets/images/springboot.jpg" style="height:50px;">
+                            <img src="/fore/assets/images/mysql.jpg" style="height:50px;">
+                            <img src="/fore/assets/images/ssl.jpg" style="height:60px;">
+                            <img src="/fore/assets/images/layui.jpg" style="height:50px;">
+                            <img src="/fore/assets/images/vuejs.jpg" style="height:50px;">
                         </div>
                     </fieldset>
                     <blockquote class="layui-elem-quote " style="background-color: white">
@@ -53,11 +69,8 @@
                     </blockquote>
                     <fieldset class="layui-elem-field">
                         <div class="layui-field-box" >
-                            <span>可以通过QQ or 发邮件的方式联系我</span>
+                            <span>目前仅支持留言联系，建议留言时勾上回复时通知的选项。</span>
                             <br>
-                            <span>QQ:1163959815</span>
-                            <br>
-                            <i class="iconfont icon-mail" style="font-size:20px;padding-right: 5px;"></i><a href="mailto:zhoujianguo@njfu.edu.cn" style="color:rgb(0,132,255)">zhoujianguo@njfu.edu.cn</a>
                         </div>
                     </fieldset>
                     <blockquote class="layui-elem-quote " style="background-color: white">
@@ -67,14 +80,16 @@
                         <div class="layui-field-box">
                             <span>本站仅做个人学习记录用。</span>
                             <br>
-                            <span>本站代码会在将来上传到Github开源，如紧急需要，可以联系我，但只支持部分代码开源。</span>
+                            <span>本站代码已在Github开源，有需要的可以<a style="color:rgb(0,132,255)"  target="_blank" href="https://github.com/Nothing-bit/ZJGBlog/">点击此处</a>前往查看，如果觉得对你有帮助，记得Star，感谢支持！</span>
+                            <b style="font-style:italic">注：Github已同步更新，更新时间戳：2020年6月3日17:29:01</b>
                             <br>
+                            <span>如需要交换友链，请添加完成后，在留言处留言贵站的链接即可，logo仅支持超链接。</span>
                         </div>
                     </fieldset>
                 </div>
             </div>
         <!--留言模块-->
-            <div class="layui-card">
+            <div class="layui-card " >
                 <div class="layui-card-body">
                     <fieldset class="layui-elem-field">
                         <legend>发表留言</legend>
@@ -82,9 +97,6 @@
                             <div class="layui-row">
                                 <div class="layui-col-lg6 layui-col-lg-offset3" th:if="${session.userInfo} == null">
                                     <div class="layui-row" style="padding: 20px;text-align: center">
-<!--                                        <div class="layui-row">-->
-<!--                                            <i class="layui-icon layui-icon-face-smile-b " style="font-size: 90px;color: #00BE67"></i>-->
-<!--                                        </div>-->
                                         <div class="layui-row" style="padding: 10px;">
                                             <span >请先登录后再发表留言~</span>
                                         </div>
@@ -100,22 +112,27 @@
                                         <button class="layui-btn layui-btn-danger" onclick="logout()">注销</button>
                                     </div>
                                     <form class="layui-form" action="">
-                                        <div class="layui-form-item layui-form-text">
+                                        <div class="layui-form-item ">
                                             <label class="layui-form-label" >留言内容</label>
-                                            <input name="targetId" value="0" style="display: none;">
                                             <div class="layui-input-block">
                                                 <textarea name="content" placeholder="友善的留言是交流的起点···" lay-verify="required" class="layui-textarea" maxlength="400"></textarea>
                                             </div>
                                         </div>
-                                        <!--<div class="layui-form-item">-->
-                                        <!--<label class="layui-form-label">滑动验证</label>-->
-                                        <!--<div class="layui-input-block">-->
-                                        <!--<div id="commentSlider"></div>-->
-                                        <!--</div>-->
-                                        <!--</div>-->
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label"style="text-align: center">当留言被回复时，请通知我</label>
+                                            <div class="layui-input-block" >
+                                                <input type="checkbox"  lay-filter="informComment" name="inform" lay-skin="switch" lay-text="通知|不通知">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                                <label class="layui-form-label">通知邮箱：</label>
+                                            <div class="layui-input-inline">
+                                                <input type="text" id="emailComment" name="email"  autocomplete="true" class="layui-input">
+                                            </div>
+                                        </div>
                                         <div class="layui-form-item">
                                             <div class="layui-input-block" style="text-align: center">
-                                                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                                                <button class="layui-btn" lay-submit lay-filter="formComment">立即提交</button>
                                                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                                             </div>
                                         </div>
@@ -132,7 +149,7 @@
                 </div>
             </div>
             <!--留言展示部分-->
-            <div class="layui-card">
+            <div class="layui-card ">
                 <div class="layui-card-body">
                     <fieldset class="layui-elem-field">
                         <legend th:text="'留言  共'+${total}+'条'"></legend>
@@ -144,44 +161,49 @@
                             </div>
                             <!--留言展示-->
                             <div class="layui-row"   style="padding-left: 40px;padding-right: 40px;" id="commentModule">
-                                <!--留言模块-->
-                                <div class="layui-col-lg8 layui-col-lg-offset2"  v-for="item in items">
-                                    <div class="layui-row">
-                                        <div class="layui-col-lg4" >
-                                            <img class="layui-circle" style="width: 30px" v-bind:src="item.avatar">
-                                            <span style="font-size: 15px;color: rgb(0,150,136)">{{item.username}}</span>
-                                        </div>
-                                        <div class="layui-col-lg4 layui-col-lg-offset4"  style="text-align: right">
-                                            <span>留言于</span>
-                                            <span >{{item.createBy}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="layui-row" style="padding-left: 30px;padding-top: 10px;padding-bottom: 10px;">
-                                        <span >{{item.content}}</span>
-                                    </div>
-                                    <div class="layui-row" style="padding-left: 30px;padding-top: 5px;padding-bottom: 5px;">
-                                        <i class="layui-icon layui-icon-dialogue"></i><a v-on:click="reply(item.id,item.username)" style="color:rgb(0,132,255)" href="javascript:void(0)">回复</a>
-                                    </div>
-                                    <!--子回复模块-->
-                                    <div class="layui-row"style="padding-left: 30px;" id="replyModule">
-                                        <blockquote class="layui-elem-quote " style="background-color: white" v-for="childItem in item.replyList">
-                                            <div class="layui-row">
-                                                <div class="layui-col-lg4" >
-                                                    <img class="layui-circle" style="width: 30px" v-bind:src="childItem.avatar">
-                                                    <span style="font-size: 15px;color: rgb(0,150,136)">{{childItem.username}}</span>
-                                                </div>
-                                                <div class="layui-col-lg4 layui-col-lg-offset4" style="text-align: right">
-                                                    <span>回复于</span>
-                                                    <span >{{childItem.createBy}}</span>
-                                                </div>
+                                <transition-group name="list-complete" enter-active-class="animated lightSpeedIn">
+                                    <!--留言模块-->
+                                    <div class="layui-col-lg8 layui-col-lg-offset2 list-complete-item"  v-for="commentItem in items" v-bind:key="commentItem">
+                                        <div class="layui-row">
+                                            <div class="layui-col-lg4" >
+                                                <img class="layui-circle" style="width: 30px" v-bind:src="commentItem.avatar">
+                                                <span style="font-size: 15px;color: rgb(0,150,136)">{{commentItem.username}}</span>
                                             </div>
-                                            <div class="layui-row" style="padding-left: 30px;padding-top: 10px;padding-bottom: 10px;">
-                                                <span>{{childItem.content}}</span>
+                                            <div class="layui-col-lg4 layui-col-lg-offset4"  style="text-align: right">
+                                                <span>留言于</span>
+                                                <span >{{commentItem.createBy}}</span>
                                             </div>
-                                        </blockquote>
+                                        </div>
+                                        <div class="layui-row" style="padding-left: 30px;padding-top: 10px;padding-bottom: 10px;">
+                                            <span >{{commentItem.content}}</span>
+                                        </div>
+                                        <div class="layui-row" style="padding-left: 30px;padding-top: 5px;padding-bottom: 5px;">
+                                            <i class="layui-icon layui-icon-dialogue"></i><a v-on:click="reply(commentItem.userId,commentItem.username,commentItem.id)" style="color:rgb(0,132,255)" href="javascript:void(0)">回复</a>
+                                        </div>
+                                        <!--子回复模块-->
+                                        <div class="layui-row"style="padding-left: 30px;" id="replyModule">
+                                            <blockquote class="layui-elem-quote " style="background-color: white" v-for="replyItem in commentItem.replyList">
+                                                <div class="layui-row">
+                                                    <div class="layui-col-lg4" >
+                                                        <img class="layui-circle" style="width: 30px" v-bind:src="replyItem.avatar">
+                                                        <span style="font-size: 15px;color: rgb(0,150,136)">{{replyItem.username}}</span>
+                                                    </div>
+                                                    <div class="layui-col-lg4 layui-col-lg-offset4" style="text-align: right">
+                                                        <span>回复于</span>
+                                                        <span >{{replyItem.createBy}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-row" style="padding-left: 30px;padding-top: 10px;padding-bottom: 10px;">
+                                                    <span style="color:rgb(0,132,255)">@{{replyItem.targetUsername}}&nbsp</span><span>{{replyItem.content}}</span>
+                                                </div>
+                                                <div class="layui-row" style="padding-left: 30px;padding-top: 5px;padding-bottom: 5px;">
+                                                    <i class="layui-icon layui-icon-dialogue"></i><a v-on:click="reply(replyItem.userId,replyItem.username,commentItem.id)" style="color:rgb(0,132,255)" href="javascript:void(0)">回复</a>
+                                                </div>
+                                            </blockquote>
+                                        </div>
+                                        <hr class="layui-bg-gray">
                                     </div>
-                                    <hr class="layui-bg-gray">
-                                </div>
+                                </transition-group>
                             </div>
                         </div>
                     </fieldset>
@@ -214,19 +236,24 @@
     <div class='layui-form-item layui-form-text'>
         <label class='layui-form-label'>回复内容</label>
         <div class='layui-input-block'>
-            <input name='targetId' id="targetId"  style='display: none'>
-            <textarea name='content' placeholder='友善的留言是交流的起点···' lay-verify='required' class='layui-textarea'></textarea>
+            <textarea name='content' placeholder='友善的回复是交流的起点···' lay-verify='required' class='layui-textarea'></textarea>
         </div>
     </div>
-    <!--<div class="layui-form-item">-->
-    <!--<label class="layui-form-label">滑动验证</label>-->
-    <!--<div class="layui-input-block">-->
-    <!--<div id="replySlider"></div>-->
-    <!--</div>-->
-    <!--</div>-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"style="text-align: center">当留言被回复时，请通知我</label>
+        <div class="layui-input-block" >
+            <input type="checkbox"  lay-filter="informReply" name="inform" lay-skin="switch" lay-text="通知|不通知">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">通知邮箱：</label>
+        <div class="layui-input-inline">
+            <input type="text" id="emailReply" name="email"  autocomplete="true" class="layui-input">
+        </div>
+    </div>
     <div class='layui-form-item'>
         <div  style='text-align: center'>
-            <button class='layui-btn' lay-submit lay-filter='formDemo'>立即提交</button>
+            <button class='layui-btn' lay-submit lay-filter='formReply'>立即提交</button>
             <button type='reset' class='layui-btn layui-btn-primary'>重置</button>
         </div>
     </div>
@@ -241,12 +268,12 @@
     <div class="layui-col-lg4 layui-col-lg-offset4" style="padding: 20px;text-align: center;line-height: 25px;">
         <span >@CopyRight 2019 ZhouJianGuo版权所有</span>
         <br>
-        <a href="http://beian.miit.gov.cn"><span style="color: white">苏ICP备19061991号</span></a>
+        <a target="_blank" href="http://beian.miit.gov.cn"><span style="color: white">苏ICP备19061991号</span></a>
     </div>
 </div>
 <!--script配置-->
 <script opacity="0.9"  src="/fore/assets/js/canvas-nest.js"></script>
-<script src="/fore/assets/js/vue.js"></script>
+<script src="/fore/assets/js/vue.min.js"></script>
 <script src="/fore/assets/js/login-api.js"></script>
 <script src="/fore/assets/layui.js"></script>
 <script>
@@ -254,10 +281,11 @@
     layui.config({
         base: '/fore/assets/lay/modules/'
     })
-    layui.use(['util','element','form','sliderVerify','laypage'],function () {
+    layui.use(['util','element','form','laypage'],function () {
         var util=layui.util;
         var $=layui.jquery;
         window.$=$
+        //右下按钮
         util.fixbar({
             top:true,
             css: { right: 15, bottom: 35 },
@@ -265,26 +293,40 @@
             showHeight:100,
         })
         var form = layui.form;
+        //监听comment switch控件
+        form.on('switch(informComment)', function(data){
+            if(data.elem.checked){//开启邮件通知
+                $('#emailComment').prop('disabled',false)
+            }else{
+                $('#emailComment').prop('disabled',true)
+                $('#emailComment').val("")
+            }
+        });
+        //监听reply switch控件
+        form.on('switch(informReply)', function(data){
+            if(data.elem.checked){//开启邮件通知
+                $('#emailReply').prop('disabled',false)
+            }else{
+                $('#emailReply').prop('disabled',true)
+                $('#emailReply').val("")
+            }
+        });
 
-        var sliderVerify = layui.sliderVerify
-
-        // var commentSlider = sliderVerify.render({
-        //     elem: '#commentSlider',
-        //     onOk: function(){//当验证通过回调
-        //         layer.msg("滑块验证通过",{icon:6});
-        //     }
-        // })
-        // var replySlider=sliderVerify.render({
-        //     elem: '#replySlider',
-        //     onOk: function(){//当验证通过回调
-        //         layer.msg("滑块验证通过",{icon:6});
-        //     }
-        // })
-        form.on('submit(formDemo)', function(data){
-            // if(commentSlider.isOk()||replySlider.isOk()){//用于表单验证是否已经滑动成功
+        var parentId=0;
+        var targetUserId=0;
+        //监听comment表单
+        form.on('submit(formComment)', function(data){
+            var submitData={};
+            submitData.content=data.field.content;
+            if(data.field.inform){
+                submitData.inform=true;
+            }else{
+                submitData.inform=false;
+            }
+            submitData.email=data.field.email
             $.ajax({
                 contentType:'application/json',
-                data:JSON.stringify(data.field),
+                data:JSON.stringify(submitData),
                 dataType:'json',
                 type:'post',
                 url:'/fore/comment',
@@ -292,29 +334,40 @@
                     if(data.code==200){
                         layer.msg('提交留言成功！请等待审核！',{icon: 6})
                         setTimeout("location.reload()",3000)
-                       // commentSlider.reset();
-                       // replySlider.reset();
                     }
                 }
             })
-            //   }else{
-            //        layer.msg("请先通过滑块验证");
-            //  }
             return false;
         });
-
-
-
-        var util=layui.util;
-        util.fixbar({
-            top:true,
-            css: { right: 15, bottom: 35 },
-            bgcolor: '#A4A4A4',
-            showHeight:100,
-        })
-
+//监听reply表单
+        form.on('submit(formReply)', function(data){
+            var submitData={};
+            submitData.content=data.field.content;
+            if(data.field.inform){
+                submitData.inform=true;
+            }else{
+                submitData.inform=false;
+            }
+            submitData.email=data.field.email;
+            submitData.targetUserId=targetUserId;
+            submitData.parentId=parentId;
+            $.ajax({
+                contentType:'application/json',
+                data:JSON.stringify(submitData),
+                dataType:'json',
+                type:'post',
+                url:'/fore/comment/reply',
+                success:function (data) {
+                    if(data.code==200){
+                        layer.msg('提交回复成功！请等待审核！',{icon: 6})
+                        setTimeout("location.reload()",3000)
+                    }
+                }
+            })
+            return false;
+        });
+//分页渲染
         var commentModule=null;
-
         var laypage=layui.laypage;
         var total=[[${total}]]
         var pageSize=[[${pageSize}]]
@@ -338,9 +391,11 @@
                                         items:result.pageInfo.list
                                     },
                                     methods:{
-                                        reply(id,username){
+                                        reply(userId,username,id){
+                                            targetUserId=userId;
+                                            parentId=id;
                                             if(checkLogin()==1){
-                                                reply(id,username)
+                                                reply(username)
                                             }
                                         }
                                     }

@@ -31,9 +31,17 @@ public class SysViewServiceImpl implements SysViewService {
     }
 
     @Override
-    public PageInfo queryViews(int pageNum, int pageSize) {
+    public int deleteView(long id) {
+        sysViewMapper.deleteByPrimaryKey(id);
+        return 0;
+    }
+
+    @Override
+    public PageInfo queryViews(int pageNum, int pageSize,String searchValue,String orderProperty,String orderDirection) {
         SysViewExample sysViewExample=new SysViewExample();
-        sysViewExample.setOrderByClause("create_by desc");
+        sysViewExample.setOrderByClause(orderProperty+" "+orderDirection);
+        sysViewExample.createCriteria()
+                .andAddressLike("%"+searchValue+"%");
         PageHelper.startPage(pageNum,pageSize);
         List<SysView> daoList=sysViewMapper.selectByExample(sysViewExample);
         PageInfo<SysView> daoPageInfo=new PageInfo<>(daoList);

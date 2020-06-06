@@ -5,15 +5,16 @@
     <link rel="stylesheet" href="/fore/assets/css/layui.css">
     <link rel="icon" href="/fore/assets/images/favicon.ico" type="icon">
     <link rel="stylesheet" href="/fore/assets/icon/iconfont.css">
+    <link rel="stylesheet" href="/fore/assets/css/animate.css">
 </head>
 <body class="layui-bg-gray" >
 <!--导航栏-->
 <div class="layui-row ">
     <ul class="layui-nav layui-icon-align-center" style="text-align: center;">
         <li class="layui-nav-item "><a href="/fore/index/page"  style="font-size: 17px;"><i class="layui-icon layui-icon-home" style="padding-right: 5px;"></i>主页</a></li>
-        <li class="layui-nav-item "><a href="/fore/category/page" style="font-size: 17px;"><i class="layui-icon layui-icon-app" style="padding-right: 5px;"></i>分类</a></li>
+        <li class="layui-nav-item "><a href="/fore/category/page/0" style="font-size: 17px;"><i class="layui-icon layui-icon-app" style="padding-right: 5px;"></i>分类</a></li>
         <li class="layui-nav-item layui-this"><a href="/fore/tag/page" style="font-size: 17px;"><i class="layui-icon layui-icon-note" style="padding-right: 5px;"></i>标签</a></li>
-        <li class="layui-nav-item "><a href="/fore/archive/page" style="font-size: 17px;"><i class="layui-icon layui-icon-chart" style="padding-right: 5px;"></i>归档</a></li>
+        <li class="layui-nav-item "><a href="/fore/archive/page?month=all" style="font-size: 17px;"><i class="layui-icon layui-icon-date" style="padding-right: 5px;"></i>归档</a></li>
         <li class="layui-nav-item "><a href="/fore/about/page" style="font-size: 17px;"><i class="layui-icon layui-icon-more" style="padding-right: 5px;"></i>关于</a></li>
     </ul>
 </div>
@@ -23,11 +24,11 @@
         <div class="layui-card " style="padding: 50px;min-height: 500px;" >
             <div class="layui-card-header">
                 <div class="layui-row" style="text-align: center;">
-                    <h2 th:text="'目前共有 '+${tagList.size()}+' 个标签'"></h2>
+                    <h2 style="color:rgb(95,184,120);" th:text="'#目前共有 '+${tagList.size()}+' 个标签#'"></h2>
                 </div>
             </div>
             <div class="layui-card-body">
-                <div class="layui-row layui-anim layui-anim-up" >
+                <div class="layui-row animated bounceInUp" >
                     <div class="layui-btn-container" style="text-align: center">
                         <a  th:each="item:${tagList}" th:href="@{'/fore/article/tag/page?tagName='+${item.name}}">
                             <span class="layui-btn layui-btn-primary" th:text="${item.name}" ></span>
@@ -43,7 +44,7 @@
     <div class="layui-col-lg4 layui-col-lg-offset4" style="padding: 20px;text-align: center;line-height: 25px;">
         <span >@CopyRight 2019 ZhouJianGuo版权所有</span>
         <br>
-        <a href="http://beian.miit.gov.cn"><span style="color: white">苏ICP备19061991号</span></a>
+        <a target="_blank" href="http://beian.miit.gov.cn"><span style="color: white">苏ICP备19061991号</span></a>
     </div>
 </div>
 <!--script配置-->

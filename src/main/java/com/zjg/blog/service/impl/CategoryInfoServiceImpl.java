@@ -40,9 +40,18 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
     }
 
     @Override
-    public PageInfo queryCategories(int pageNum, int pageSize) {
+    public List<CategoryInfo> queryAll() {
         CategoryInfoExample categoryInfoExample=new CategoryInfoExample();
-        categoryInfoExample.setOrderByClause("create_by desc");
+        categoryInfoExample.setOrderByClause("number desc");
+        return categoryInfoMapper.selectByExample(categoryInfoExample);
+    }
+
+    @Override
+    public PageInfo queryCategories(int pageNum, int pageSize,String searchValue,String orderProperty,String orderDirection) {
+        CategoryInfoExample categoryInfoExample=new CategoryInfoExample();
+        categoryInfoExample.setOrderByClause(orderProperty+" "+orderDirection);
+        categoryInfoExample.createCriteria()
+                .andNameLike("%"+searchValue+"%");
         PageHelper.startPage(pageNum,pageSize);
         List<CategoryInfo> daoList=categoryInfoMapper.selectByExample(categoryInfoExample);
         PageInfo<CategoryInfo> daoPageInfo=new PageInfo<>(daoList);
@@ -55,16 +64,23 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
     }
 
     @Override
-    public List<CategoryInfo> queryAllCategory() {
+    public PageInfo<CategoryInfo> queryCategories(int pageNum,int pageSize) {
         List<CategoryInfo> infoList;
         CategoryInfoExample example=new CategoryInfoExample();
+        PageHelper.startPage(pageNum,pageSize);
         infoList=categoryInfoMapper.selectByExample(example);
-        return infoList;
+        PageInfo<CategoryInfo> pageInfo=new PageInfo<>(infoList);
+        return pageInfo;
     }
 
     @Override
     public long countCategory() {
         CategoryInfoExample example=new CategoryInfoExample();
         return categoryInfoMapper.countByExample(example);
+    }
+
+    @Override
+    public long countArticleByCategoryId(long categoryId) {
+        return categoryInfoMapper.selectByPrimaryKey(categoryId).getNumber();
     }
 }

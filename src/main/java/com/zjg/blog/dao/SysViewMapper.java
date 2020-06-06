@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
 @Repository
 public interface SysViewMapper {
     long countByExample(SysViewExample example);
@@ -31,8 +30,6 @@ public interface SysViewMapper {
     int updateByPrimaryKeySelective(SysView record);
 
     int updateByPrimaryKey(SysView record);
-    /**
-     * 自定义部分
-     */
+
     List<TimesStatistic> queryCountByDays(int days);
 }

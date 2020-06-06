@@ -1,10 +1,11 @@
 ﻿<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
-    <title>我的学习记录</title>
+    <title>ZhouJianGuo</title>
     <link rel="stylesheet" href="/fore/assets/css/layui.css">
     <link rel="icon" href="/fore/assets/images/favicon.ico" type="icon">
     <link rel="stylesheet" href="/fore/assets/icon/iconfont.css">
+    <link rel="stylesheet" href="/fore/assets/css/animate.css">
     <style>
         .icon {
             width: 1em;
@@ -21,51 +22,61 @@
             transform: scale(1.05);
             transition: all 0.3s ease-in-out;
         }
+        .list-complete-item {
+            transition: all 1s;
+        }
+        .list-complete-leave-to{
+            display: none;
+        }
+        .list-complete-leave-active {
+            position: absolute;
+        }
     </style>
 </head>
 <body class="layui-bg-gray" >
 <!--导航栏-->
-    <div class="layui-row ">
-        <ul class="layui-nav layui-icon-align-center" style="text-align: center;">
-            <li class="layui-nav-item layui-this"><a href="/fore/index/page"  style="font-size: 17px;"><i class="layui-icon layui-icon-home" style="padding-right: 5px;"></i>主页</a></li>
-            <li class="layui-nav-item "><a href="/fore/category/page" style="font-size: 17px;"><i class="layui-icon layui-icon-app" style="padding-right: 5px;"></i>分类</a></li>
-            <li class="layui-nav-item "><a href="/fore/tag/page" style="font-size: 17px;"><i class="layui-icon layui-icon-note" style="padding-right: 5px;"></i>标签</a></li>
-            <li class="layui-nav-item "><a href="/fore/archive/page" style="font-size: 17px;"><i class="layui-icon layui-icon-chart" style="padding-right: 5px;"></i>归档</a></li>
-            <li class="layui-nav-item "><a href="/fore/about/page" style="font-size: 17px;"><i class="layui-icon layui-icon-more" style="padding-right: 5px;"></i>关于</a></li>
-        </ul>
-    </div>
+<div class="layui-row ">
+    <ul class="layui-nav layui-icon-align-center" style="text-align: center;">
+        <li class="layui-nav-item layui-this"><a href="/fore/index/page"  style="font-size: 17px;"><i class="layui-icon layui-icon-home" style="padding-right: 5px;"></i>主页</a></li>
+        <li class="layui-nav-item "><a href="/fore/category/page/0" style="font-size: 17px;"><i class="layui-icon layui-icon-app" style="padding-right: 5px;"></i>分类</a></li>
+        <li class="layui-nav-item "><a href="/fore/tag/page" style="font-size: 17px;"><i class="layui-icon layui-icon-note" style="padding-right: 5px;"></i>标签</a></li>
+        <li class="layui-nav-item "><a href="/fore/archive/page?month=all" style="font-size: 17px;"><i class="layui-icon layui-icon-date" style="padding-right: 5px;"></i>归档</a></li>
+        <li class="layui-nav-item "><a href="/fore/about/page" style="font-size: 17px;"><i class="layui-icon layui-icon-more" style="padding-right: 5px;"></i>关于</a></li>
+    </ul>
+</div>
 <!--主体-->
     <div class="layui-row " style="padding: 20px;">
         <!--第一列-->
-        <div class="layui-col-lg3 " style="padding: 10px;">
+        <div class="layui-col-lg3 animated bounceInLeft" style="padding: 10px;">
             <!--个人名片-->
-            <div class="layui-card layui-anim layui-anim-upbit" >
+            <div class="layui-card " >
                 <div class="layui-card-body" >
                     <div class="layui-row" style="text-align: center">
-                        <div class="layui-row layui-anim layui-anim-scaleSpring"style="padding-top: 20px" >
+                        <div class="layui-row "style="padding-top: 20px" >
                             <img src="/fore/assets/images/headPic.png" style="height:120px;width: 120px;border-radius: 8px;">
                         </div>
                         <div class="layui-row" style="padding-top: 15px;">
                             <h2>ZhouJianGuo</h2>
                         </div>
                         <div class="layui-row" style="padding-top: 5px;">
-                            <span>A student learning Computer Technology</span>
+                            <span>一个计算机专业的学生，只会修电脑，不会写程序。</span>
                         </div>
                         <div class="layui-row" style="padding: 5px;">
                             <span><i class="layui-icon layui-icon-location" style="color: blue"></i>中国·南京</span>
                         </div>
                         <hr class="layui-bg-gray">
                         <div class="layui-row ">
-                            <div class="layui-col-lg3 layui-col-lg-offset3">
-                                <a href="https://www.zhihu.com/people/zhou-xiao-jun-3-75/activities"><img src="/fore/assets/images/third-logo/zhihu.png" id="zhihu"></a>
+                            <div class="layui-col-sm4 layui-col-sm-offset2 layui-col-lg3 layui-col-lg-offset3">
+                                <a target="_blank" href="https://www.zhihu.com/people/zhou-xiao-jun-3-75/activities"><img src="/fore/assets/images/third-logo/zhihu.png" id="zhihu"></a>
                             </div>
-                            <div class="layui-col-lg3">
-                                <a href="https://github.com/Nothing-bit" ><img src="/fore/assets/images/third-logo/github.png" id="github"></a>
+                            <div class="layui-col-sm4 layui-col-lg3">
+                                <a target="_blank" href="https://github.com/Nothing-bit" ><img src="/fore/assets/images/third-logo/github.png" id="github"></a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
 <!--            公告-->
             <div class="layui-card">
                <div class="layui-card-body" >
@@ -77,26 +88,10 @@
                    </fieldset>
                </div>
             </div>
-<!--            天气预报-->
+            <!-- 天气 -->
             <div class="layui-card">
                 <div class="layui-card-body">
-                    <fieldset class="layui-elem-field">
-                        <legend><i class="iconfont icon-qixiangtubiao-wubeijing-" style="font-size: 20px;"></i>天气</legend>
-                        <div id="he-plugin-standard"></div>
-                        <script>
-                            WIDGET = {
-                                CONFIG: {
-                                    "layout": 2,
-                                    "width": "310",
-                                    "height": "270",
-                                    "background": 2,
-                                    "dataColor": "4A4A4A",
-                                    "key": "81155d3eb5734466a2a6aed118100eb2"
-                                }
-                            }
-                        </script>
-                        <script src="https://widget.heweather.net/standard/static/js/he-standard-common.js?v=1.1"></script>
-                    </fieldset>
+                    <div id="weather-view-he" style="margin:0 auto;"></div>
                 </div>
             </div>
 <!--            评论轮播-->
@@ -160,69 +155,75 @@
             </div>
         </div>
         <!--第二列-->
-        <div class="layui-col-lg6 " style="padding: 10px;" >
-            <div class="layui-row" id="previewModule" style="display: none">
-                <!--简略信息模块-->
-                <div class="layui-card layui-anim layui-anim-fadein" v-for="item in items" >
-                    <div class="layui-card-header">
-                        <div class="layui-row">
-                            <div class="layui-col-lg2">
-                                <i class="iconfont icon-zhiding" style="font-size: 25px; color: #5882FA" v-if="item.top" ></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layui-card-body">
-                        <div class="layui-row">
-                            <div class="layui-col-lg5" style="text-align: center">
-                                <a v-bind:href="'/fore/article/page/'+item.id">
-                                    <img v-bind:src="item.pictureUrl" style="width: 250px;" >
-                                </a>
-                            </div>
-                            <div class="layui-col-lg7" style="padding:10px;">
-                                <div class="layui-row" style="padding:10px;">
-                                    <h1 style="line-height: 30px;">{{item.title}}</h1>
-                                </div>
-                                <div class="layui-row" style="padding:10px;">
-                                    <div class="layui-col-lg4">
-                                        <i class="layui-icon layui-icon-app" style="padding-right: 10px;"></i><span>{{item.categoryName}}</span>
-                                    </div>
-                                    <div class="layui-col-lg4 ">
-                                        <i class="layui-icon layui-icon-date" style="padding-right: 10px;"></i><span>{{item.createBy}}</span>
-                                    </div>
-                                    <div class="layui-col-lg4">
-                                        <i class="iconfont icon-eye" style="padding-right: 10px;"></i><span>{{item.traffic}}</span>
+        <div class="layui-col-lg6" style="padding: 10px;">
+<!--            信息模块+分页模块-->
+            <div class="layui-row" id="previewDiv" style="display:none;">
+                <div class="layui-row" id="previewModule" >
+                    <!--简略信息模块-->
+                    <transition-group  name="list-complete" appear appear-active-class="animated zoomInUp" enter-active-class="animated zoomInUp" >
+                        <div class="layui-card list-complete-item" v-for="item in items" v-bind:key="item" >
+                            <div class="layui-card-header">
+                                <div class="layui-row">
+                                    <div class="layui-col-lg2">
+                                        <i class="iconfont icon-zhiding" style="font-size: 25px; color: #5882FA" v-if="item.top" ></i>
                                     </div>
                                 </div>
-                                <div class="layui-row" style="padding:10px;">
-                                    <p>{{item.summary}}</p>
+                            </div>
+                            <div class="layui-card-body">
+                                <div class="layui-row">
+                                    <div class="layui-col-lg5" style="text-align: center">
+                                        <a v-bind:href="'/fore/article/page/'+item.id">
+                                            <img v-bind:src="item.pictureUrl" style="width: 250px;" >
+                                        </a>
+                                    </div>
+                                    <div class="layui-col-lg7" style="padding:10px;">
+                                        <div class="layui-row" style="padding:10px;">
+                                            <h2 style="line-height: 30px;">{{item.title}}</h2>
+                                        </div>
+                                        <div class="layui-row" style="padding:10px;">
+                                            <div class="layui-col-lg4">
+                                                <i class="layui-icon layui-icon-app" style="padding-right: 10px;"></i><span>{{item.categoryName}}</span>
+                                            </div>
+                                            <div class="layui-col-lg4 ">
+                                                <i class="layui-icon layui-icon-date" style="padding-right: 10px;"></i><span>{{item.createBy}}</span>
+                                            </div>
+                                            <div class="layui-col-lg4">
+                                                <i class="iconfont icon-eye" style="padding-right: 10px;"></i><span>{{item.traffic}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="layui-row" style="padding:10px;">
+                                            <p>{{item.summary}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="layui-bg-gray">
+                                <div class="layui-row">
+                                    <div class="layui-col-lg10">
+                                        <div class="layui-btn-container">
+                                            <i class="layui-icon layui-icon-note" style="padding-right: 10px;"></i>
+                                            <a class="layui-btn layui-btn-primary" v-for="tagItem in item.tagList" v-bind:href="'/fore/article/tag/page?tagName='+tagItem">{{tagItem}}</a>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-lg2 " style="text-align: right">
+                                        <a class="layui-btn layui-btn-primary" v-bind:href="'/fore/article/page/'+item.id">阅读详情<i class="layui-icon layui-icon-right" style="color: #00BE67"></i></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <hr class="layui-bg-gray">
-                        <div class="layui-row">
-                            <div class="layui-col-lg10">
-                                <div class="layui-btn-container">
-                                    <i class="layui-icon layui-icon-note" style="padding-right: 10px;"></i>
-                                    <a class="layui-btn layui-btn-primary" v-for="tagItem in item.tagList" v-bind:href="'/fore/article/tag/page?tagName='+tagItem">{{tagItem}}</a>
-                                </div>
-                            </div>
-                            <div class="layui-col-lg2 " style="text-align: right">
-                                <a class="layui-btn layui-btn-primary" v-bind:href="'/fore/article/page/'+item.id">阅读详情<i class="layui-icon layui-icon-right" style="color: #00BE67"></i></a>
-                            </div>
-                        </div>
-                    </div>
+                    </transition-group>
                 </div>
-            </div>
-            <div class="layui-row">
-                <div class="layui-card">
-                    <div class="layui-card-body" id="pageSpliterDiv" style="display: none">
-                        <div id="pageSpliter" style="text-align: center ;" ></div>
+<!--                分页模块-->
+                <div class="layui-row">
+                    <div class="layui-card">
+                        <div class="layui-card-body" id="pageSpliterDiv" >
+                            <div id="pageSpliter" style="text-align: center ;" ></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <!--第三列-->
-        <div class="layui-col-lg3"style="padding: 10px;">
+        <div class="layui-col-lg3 animated bounceInRight"style="padding: 10px;">
             <!--点击Top-->
             <div class="layui-card">
                 <div class="layui-card-body">
@@ -248,14 +249,9 @@
             <div class="layui-card">
                 <div class="layui-card-body">
                     <fieldset class="layui-elem-field">
-                        <legend><i style="color: rgb(95,184,120)" class="layui-icon layui-icon-note"></i>热门标签</legend>
+                        <legend><i style="color: rgb(95,184,120)" class="layui-icon layui-icon-note"></i>标签云</legend>
                         <div class="layui-field-box">
-                            <div class="layui-btn-container">
-                                <!--<div   style="padding: 5px;">-->
-                                <!--</div>-->
-                                <a th:each="item:${tagList}" class="layui-btn layui-btn-primary" th:text="${item.name}" th:href="@{'/fore/article/tag/page?tagName='+${item.name}}"></a>
-                                <a class="layui-btn layui-btn-normal" href="/fore/tag/page">更多标签</a>
-                            </div>
+                            <div id="tagCloud" style="height: 300px;margin: 0 auto;"></div>
                         </div>
                     </fieldset>
                 </div>
@@ -267,8 +263,10 @@
                         <legend><i style="color: rgb(0,132,255)" class="layui-icon layui-icon-link"></i>友情链接</legend>
                         <div class="layui-field-box">
                             <div class="layui-btn-container">
-                                <a class="layui-btn layui-btn-primary" href="https://blog.schwarzeni.com/"><i class="layui-icon layui-icon-link" style="color: rgb(0,132,255)"></i>Schwarzeni</a>
-                                <a class="layui-btn layui-btn-primary" href="https://zybtree.github.io/"><i class="layui-icon layui-icon-link" style="color: rgb(0,132,255)"></i>zybTree</a>
+                                <a class="layui-btn layui-btn-primary" target="_blank" href="https://blog.schwarzeni.com/">Schwarzeni</a>
+                                <a class="layui-btn layui-btn-primary" target="_blank" href="https://zybtree.github.io/">zybTree</a>
+                                <a class="layui-btn layui-btn-primary" target="_blank" href="http://lqs1920.com/"><img src="http://lqs1920.com/dist/images/logo/logo.png"style="height: 20px"></a>
+                                <a class="layui-btn layui-btn-primary" target="_blank" href="https://javaymw.com"><img src="https://javaymw.com/dist/images/logo/logo.png" style="height: 20px"></a>
                             </div>
                         </div>
                     </fieldset>
@@ -288,7 +286,7 @@
                             <br>
                             <span id="sitetime"></span>
                             <br>
-                            <span>最近更新时间：2020年2月13日17:29:18</span>
+                            <span>最近更新时间：2020年6月3日20:39:41</span>
 
                         </div>
                     </fieldset>
@@ -301,15 +299,19 @@
         <div class="layui-col-lg4 layui-col-lg-offset4" style="padding: 20px;text-align: center;line-height: 25px;">
             <span >@CopyRight 2019 ZhouJianGuo版权所有</span>
             <br>
-            <a href="http://beian.miit.gov.cn"><span style="color: white">苏ICP备19061991号</span></a>
+            <a target="_blank" href="http://beian.miit.gov.cn"><span style="color: white">苏ICP备19061991号</span></a>
         </div>
     </div>
 <!--script配置-->
     <script opacity="0.9"  src="/fore/assets/js/canvas-nest.js" ></script>
     <script src="/fore/assets/icon/iconfont.js"></script>
     <script src="/fore/assets/layui.js"></script>
-    <script src="/fore/assets/js/vue.js"></script>
+    <script src="/fore/assets/js/vue.min.js"></script>
+    <script src="/fore/assets/vendors/echarts-wordcloud-master/echarts.min.js"></script>
+    <script src="/fore/assets/vendors/echarts-wordcloud-master/dist/echarts-wordcloud.min.js"></script>
+    <script type="text/javascript" src="https://apip.weatherdt.com/view/static/js/r.js?v=1111"></script>
     <script language=javascript>
+        var WIDGET = {ID: 'XrsXn8ZuhK'};
         function siteTime(){
             window.setTimeout("siteTime()", 1000);
             var seconds = 1000;
@@ -343,8 +345,6 @@
             document.getElementById("sitetime").innerHTML="本站已运行："+diffYears+" 年 "+diffDays+" 天 "+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒";
         }
         siteTime();
-    </script>
-    <script>
         //注意：导航 依赖 element 模块，否则无法进行功能性操作
         layui.config({
             version: true,
@@ -381,8 +381,8 @@
                 curr:pageNum,
                 count:total,
                 limit:pageSize,
+                layout:['prev','page','next','skip','count'],
                 jump:function (obj,first) {
-                    $("#previewModule").fadeOut()
                     $.ajax({
                         type:'get',
                         dataType:'json',
@@ -390,9 +390,9 @@
                         them:'blue',
                         success:function (result) {
                            // layer.msg(JSON.stringify(result))
+                            $("#previewDiv").show()
                             if (result.code==200){
                                 if(first){
-                                    $("#pageSpliterDiv").fadeIn()
                                     previewModule=new Vue({
                                         el:'#previewModule',
                                         data:{
@@ -402,8 +402,7 @@
                                 }else{
                                     previewModule.items=result.pageInfo.list
                                 }
-                                $("html,body").animate({scrollTop:0},200);
-                                $("#previewModule").fadeIn()
+                                $("html,body").animate({scrollTop:0},600);
                             }else{
                                 layer.msg('系统异常，请稍后重试~~~',{icon: 5})
                             }
@@ -431,14 +430,52 @@
                 indicator:'none',
                 height:'150px'
             });
-            //初始化公告
+            //初始化信息
                 $.ajax({
                     type:'get',
                     dataType:'json',
-                    url:'/fore/notice',
+                    url:'/fore/index/map',
                     success:function (result) {
                         if(result.code==200){
-                            $("#notice").text(result.data)
+                            var data=result.data
+                            $("#notice").text(data.notice)
+                            var tagCloudChart=echarts.init(document.getElementById("tagCloud"));
+
+                            var tagCloudOption={
+                                tooltip: {
+                                    triggerOn: "click",
+                                    formatter: function(e, t, n) {
+                                        window.location.href="/fore/article/tag/page?tagName="+e.name
+                                    }
+                                },
+                                series: [ {
+                                    type: 'wordCloud',
+                                    gridSize: 1,
+                                    sizeRange: [15, 50],
+                                    shape: 'circle',
+                                    width: 400,
+                                    height: 400,
+                                    drawOutOfBound: true,
+                                    textStyle: {
+                                        normal: {
+                                            color: function () {
+                                                return 'rgb(' + [
+                                                    Math.round(Math.random() * 160),
+                                                    Math.round(Math.random() * 160),
+                                                    Math.round(Math.random() * 160)
+                                                ].join(',') + ')';
+                                            }
+                                        },
+                                        emphasis: {
+                                            shadowBlur: 10,
+                                            shadowColor: '#333'
+                                        }
+                                    },
+                                    data:data.tagInfoList
+
+                                } ]
+                            };
+                            tagCloudChart.setOption(tagCloudOption)
                         }
                     }
                 })

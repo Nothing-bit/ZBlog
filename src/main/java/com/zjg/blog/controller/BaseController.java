@@ -26,4 +26,6 @@ public class BaseController {
     protected UserInfoService userInfoService;
     @Autowired
     protected SysSettingService sysSettingService;
+    @Autowired
+    protected InformService informService;
 }

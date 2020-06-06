@@ -41,6 +41,11 @@
     <script src="/admin/assets/js/html5shiv.min.js"></script>
     <script src="/admin/assets/js/respond.min.js"></script>
     <![endif]-->
+    <style>
+        .highlight {
+            background-color: skyblue;
+        }
+    </style>
 </head>
 
 <body class="no-skin">
@@ -217,16 +222,22 @@
                         <div>
                             <table id="table" class="table table-striped table-bordered table-hover"  style='text-align: center'>
                                 <thead>
-                                    <td><span>评论id</span></td>
-                                    <td><span>文章标题</span></td>
-                                    <td><span>回复目标</span></td>
-                                    <td><span>昵称</span></td>
-                                    <td><span>来源</span></td>
-                                    <td><span>评论内容</span></td>
-                                    <td><span>评论时间</span></td>
-                                    <td><span>IP</span></td>
-                                    <td><span>是否有效</span></td>
-                                    <td><span>操作</span></td>
+                                    <th class="center">
+                                        <label class="pos-rel">
+                                            <input type="checkbox" class="ace" />
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </th>
+                                    <th style="text-align: center"><span>ID</span></th>
+                                    <th style="text-align: center"><span>父评论ID</span></th>
+                                    <th style="text-align: center"><span>文章标题</span></th>
+                                    <th style="text-align: center"><span>昵称</span></th>
+                                    <th style="text-align: center"><span>被回复人</span></th>
+                                    <th style="text-align: center"><span>内容</span></th>
+                                    <th style="text-align: center"><span>平台</span></th>
+                                    <th style="text-align: center"><span>状态</span></th>
+                                    <th style="text-align: center"><span>留言/回复时间</span></th>
+                                    <th style="text-align: center"><span>操作</span></th>
                                 </thead>
                             </table>
                         </div>
@@ -239,12 +250,6 @@
                                     </div>
                                     <div class="modal-body">
                                         <form class="form-horizontal"role="form" onsubmit="submitArticleComment()">
-                                            <div class="form-group" >
-                                                <label class="col-md-4 control-label no-padding-right" >回复id: </label>
-                                                <div class="col-md-6">
-                                                    <input  type="text" id="targetIdAdd" disabled="disabled">
-                                                </div>
-                                            </div>
                                             <div class="form-group" >
                                                 <label class="col-md-4 control-label no-padding-right">回复人: </label>
                                                 <div class="col-md-6">
@@ -324,33 +329,90 @@
 <script src="/admin/assets/js/buttons.colVis.min.js"></script>
 <script src="/admin/assets/js/dataTables.select.min.js"></script>
 <script src="/admin/assets/js/sweetalert-dev.js"></script>
+<script src="/admin/assets/js/jquery.highlight.js"></script>
 <!--page sources scripts-->
 <script type="text/javascript">
 //初始化评论表格
     var dataTable = $('#table').DataTable({
-        jQueryUI: true,
-        autoWidth: false,
-        destroy: false,
         lengthMenu: [5, 10, 20],
-        ordering:false,
-        searching:false,
+        ordering:true,
+        searching:true,
         serverSide:true,
         ajax:{
             url:'/admin/article/comment/list',
             type:'get'
         },
         columns: [
-            { data: "id"},
-            { data: "articleTitle" },
-            { data: "targetId" },
-            { data: "username" },
-            { data: "source" },
-            { data: "content" },
-            { data: "createBy" },
-            { data: "ip" },
-            { data:'effective'}
+            {data:null},
+            {data: "id"},
+            {data: "parentId" },
+            {data: "articleTitle"},
+            {data: "username"},
+            {data :"targetUsername"},
+            {data: "content" },
+            {data: "source",orderable:false},
+            {data:'effective'},
+            {data: "createBy" },
+            {data:null,orderable:false}
         ],
         columnDefs:[
+            {//这个就是用来画第一列的小方块多选框的
+                targets : 0,
+                searchable : false,
+                orderable : false,
+                render : function(data, type, row) {
+                    var html="<label class='pos-rel'>"
+                    if(row.number>0){
+                        html+="<input type='checkbox'class='ace ' disabled='disabled'/>"
+                    }else{
+                        html+="<input type='checkbox'class='ace ' />"
+                    }
+
+                    html+="<span class='lbl'></span>"
+                    html+="</label>"
+                    return html;
+                }
+            },
+            {
+                targets : 2,
+                render : function(data, type, row) {
+                    var html=""
+                    if(row.parentId!=0){
+                        html+="<span>"+row.parentId+"</span>"
+                    }else{
+                        html+="<span class='label label-danger'>无</span>"
+                    }
+                    return html;
+                }
+            },
+            {
+                targets : 5,
+                render : function(data, type, row) {
+                    var html=""
+                    if(row.targetUsername!=0){
+                        html+="<span>"+row.targetUsername+"</span>"
+                    }else{
+                        html+="<span class='label label-danger' >无</span>"
+                    }
+                    return html;
+                }
+            },
+            {
+                targets:7,
+                render: function (data, type, row) {
+                    var html="";
+                    //平台匹配
+                    if(data.includes("QQ")){
+                        html+="<img src='/admin/assets/images/icon/qq.png'>"
+
+                    }else if(data.includes("GITHUB")){
+                        html+="<img src='/admin/assets/images/icon/github.png'>"
+                    }else{
+                        html+="<img src='/admin/assets/images/icon/unknown.png'>"
+                    }
+                    return html;
+                }
+            },
             {
                 targets:8,
                 render:function (data, type, row, meta) {
@@ -364,7 +426,7 @@
                 }
             },
             {
-                targets:9,
+                targets:10,
                 render:function (data, type, row, meta) {
                     var html="<div class='hidden-sm hidden-xs action-buttons'>\
                                 <a class='blue'  onclick='addArticleComment("+JSON.stringify(row)+")'><i class='ace-icon fa fa-reply bigger-130'></i></a>\
@@ -375,6 +437,7 @@
                     return html
                 }
         }],
+        order:[1,'desc'],
         language: {
             "decimal": "",
             "emptyTable": "空数据",
@@ -386,7 +449,7 @@
             "lengthMenu": "显示 _MENU_ 条数据",
             "loadingRecords": "加载中...",
             "processing": "处理中...",
-            "search": "查找:",
+            "search": "查找(内容):",
             "zeroRecords": "未能找到相关数据",
             "paginate": {
                 "first": "首页",
@@ -400,27 +463,140 @@
             }
         }
     });
+$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+
+new $.fn.dataTable.Buttons( dataTable, {
+    buttons: [
+        {   "extend": "colvis",
+            "text": "<i class='fa fa-eye bigger-110 blue'></i> <span class='hidden'>显示/隐藏指定列</span>",
+            "className": "btn btn-white btn-primary btn-bold"
+        },
+        {
+            "text":"<i class='fa fa-trash' ></i> <span class='hidden'>批量删除</span>",
+            "className": "btn btn-white btn-danger btn-bold",
+            "action":function(){//删除
+                var array = new Array();
+                array = dataTable.rows({selected : true}).data().toArray();
+                if(array.length==0){//如果一个没有勾选
+                    swal({    //提示框
+                        title : "批量删除失败",
+                        text : "请先勾选需要删除的数据",
+                        type : "error",
+                        showConfirmButton : true,
+                    });
+                }else{
+                    swal({
+                        title : "批量删除",
+                        text : "即将批量删除所选评论/回复!",
+                        type : "warning",
+                        showCancelButton : true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText : "确定删除",
+                        cancelButtonText : "取消删除",
+                        closeOnConfirm : false,
+                    }, function() {
+                        for (var i = 0; i < array.length; i++) {
+                            $.ajax({
+                                type:'delete',
+                                dataType:'json',
+                                url:'/admin/article/comment/'+array[i].id,
+                                async:false,
+                                success:function (data) {
+                                    if(data.code!=200){
+                                        swal("出错啦！","批量删除评论/回复时出错！","error")
+                                    }
+                                }
+                            })//确定删除，则执行删除函数
+                            dataTable.ajax.reload()
+                            swal("删除成功","批量删除："+array.length+"个评论/回复成功！","success")
+                            $("#table > thead > tr > th >label >input[type=checkbox]").prop('checked', false)
+                        }
+                    });
+                }
+            }
+        }
+    ]
+} );
+dataTable.buttons().container().appendTo( $('.tableTools-container') );
+var defaultColvisAction = dataTable.button(0).action();
+dataTable.button(0).action(function (e, dt, button, config) {
+
+    defaultColvisAction(e, dt, button, config);
+
+
+    if($('.dt-button-collection > .dropdown-menu').length == 0) {
+        $('.dt-button-collection')
+            .wrapInner('<ul class="dropdown-menu dropdown-light dropdown-caret dropdown-caret" />')
+            .find('a').attr('href', '#').wrap("<li />")
+    }
+    $('.dt-button-collection').appendTo('.tableTools-container .dt-buttons')
+});
+setTimeout(function() {
+    $($('.tableTools-container')).find('a.dt-button').each(function() {
+        var div = $(this).find(' > div').first();
+        if(div.length == 1) div.tooltip({container: 'body', title: div.parent().text()});
+        else $(this).tooltip({container: 'body', title: $(this).text()});
+    });
+}, 500);
+
+//table checkboxes
+$('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
+
+//select/deselect all rows according to table header checkbox
+$('#table > thead > tr > th input[type=checkbox], #table_wrapper input[type=checkbox]').eq(0).on('click', function(){
+    var th_checked = this.checked;//checkbox inside "TH" table header
+    if(th_checked){
+        $('td input[type=checkbox][disabled!=disabled]').prop('checked',true);
+    }else{
+        $('td input[type=checkbox]').prop('checked',false);
+    }
+    var length=$("#table > tbody >tr ").length;
+    for(var i=0;i<length;i++){
+        if(th_checked&&!$("#table > tbody > tr:eq("+i+") >td:eq(0)>label >input[type=checkbox]").is(":disabled")){
+            dataTable.row(i).select();
+        }else{
+            dataTable.row(i).deselect();
+        }
+    }
+
+});
+
+//select/deselect a row when the checkbox is checked/unchecked
+$('#table').on('click', 'td input[type=checkbox]' , function(){
+    var row = $(this).closest('tr').get(0);
+    if(this.checked) dataTable.row(row).select();
+    else dataTable.row(row).deselect();
+});
     //初始化回复评论模态框
+    var articleId;
+    var targetUserId;
+    var parentId;
     function addArticleComment(row) {
         $("#addCommentModal").modal();
-        $("#targetIdAdd").val(row.id);
         $("#targetNameAdd").val(row.username);
-        $("#addCommentModal").attr('value',row.articleId)
+        targetUserId=row.userId
+        if(row.parentId==0){
+            parentId=row.id;
+        }else{
+            parentId=row.parentId;
+        }
+        articleId=row.articleId;
 
     }
     //提交回复
     function submitArticleComment() {
         event.preventDefault();
-        var req={};
-        req.targetId=$("#targetIdAdd").val();
-        req.content=$("#contentAdd").val();
-        req.articleId=$("#addCommentModal").attr('value')
+        var submitData={};
+        submitData.targetUserId=targetUserId
+        submitData.content=$("#contentAdd").val();
+        submitData.articleId=articleId
+        submitData.parentId=parentId
         $.ajax({
-            data:JSON.stringify(req),
+            data:JSON.stringify(submitData),
             dataType:'json',
             contentType:'application/json',
             type:'post',
-            url:'/admin/article/comment/',
+            url:'/admin/article/comment/reply',
             success:function (result) {
                 if(result.code==200){
                     swal("提示","回复成功！","success")
@@ -485,6 +661,12 @@
                 })
             }})
     }
+    //search highlight
+    dataTable.on('draw', function () {
+        var body = $(dataTable.table().body());
+        body.unhighlight();
+        body.highlight(dataTable.search());
+    });
 </script>
 </body>
 </html>

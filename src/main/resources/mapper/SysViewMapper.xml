@@ -4,6 +4,9 @@
   <resultMap id="BaseResultMap" type="com.zjg.blog.entity.SysView">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="isp" jdbcType="VARCHAR" property="isp" />
+    <result column="operate_by" jdbcType="VARCHAR" property="operateBy" />
     <result column="create_by" jdbcType="TIMESTAMP" property="createBy" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -65,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, ip, create_by
+    id, ip, address, isp, operate_by, create_by
   </sql>
   <select id="selectByExample" parameterType="com.zjg.blog.entity.SysViewExample" resultMap="BaseResultMap">
     select
@@ -98,14 +101,25 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.zjg.blog.entity.SysView" useGeneratedKeys="true">
-    insert into sys_view (ip, create_by)
-    values (#{ip,jdbcType=VARCHAR}, #{createBy,jdbcType=TIMESTAMP})
+    insert into sys_view (ip, address, isp, 
+      operate_by, create_by)
+    values (#{ip,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{isp,jdbcType=VARCHAR}, 
+      #{operateBy,jdbcType=VARCHAR}, #{createBy,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.zjg.blog.entity.SysView" useGeneratedKeys="true">
     insert into sys_view
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="ip != null">
         ip,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="isp != null">
+        isp,
+      </if>
+      <if test="operateBy != null">
+        operate_by,
       </if>
       <if test="createBy != null">
         create_by,
@@ -114,6 +128,15 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="ip != null">
         #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="isp != null">
+        #{isp,jdbcType=VARCHAR},
+      </if>
+      <if test="operateBy != null">
+        #{operateBy,jdbcType=VARCHAR},
       </if>
       <if test="createBy != null">
         #{createBy,jdbcType=TIMESTAMP},
@@ -135,6 +158,15 @@
       <if test="record.ip != null">
         ip = #{record.ip,jdbcType=VARCHAR},
       </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isp != null">
+        isp = #{record.isp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operateBy != null">
+        operate_by = #{record.operateBy,jdbcType=VARCHAR},
+      </if>
       <if test="record.createBy != null">
         create_by = #{record.createBy,jdbcType=TIMESTAMP},
       </if>
@@ -147,6 +179,9 @@
     update sys_view
     set id = #{record.id,jdbcType=BIGINT},
       ip = #{record.ip,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      isp = #{record.isp,jdbcType=VARCHAR},
+      operate_by = #{record.operateBy,jdbcType=VARCHAR},
       create_by = #{record.createBy,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -158,6 +193,15 @@
       <if test="ip != null">
         ip = #{ip,jdbcType=VARCHAR},
       </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="isp != null">
+        isp = #{isp,jdbcType=VARCHAR},
+      </if>
+      <if test="operateBy != null">
+        operate_by = #{operateBy,jdbcType=VARCHAR},
+      </if>
       <if test="createBy != null">
         create_by = #{createBy,jdbcType=TIMESTAMP},
       </if>
@@ -167,10 +211,12 @@
   <update id="updateByPrimaryKey" parameterType="com.zjg.blog.entity.SysView">
     update sys_view
     set ip = #{ip,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      isp = #{isp,jdbcType=VARCHAR},
+      operate_by = #{operateBy,jdbcType=VARCHAR},
       create_by = #{createBy,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
-
   <select id="queryCountByDays" parameterType="int" resultType="com.zjg.blog.entity.TimesStatistic">
       SELECT count(*)as count,date(create_by) as date FROM blog.sys_view group by date(create_by) order by create_by desc limit #{arg0};
   </select>

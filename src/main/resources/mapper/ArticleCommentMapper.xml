@@ -4,12 +4,14 @@
   <resultMap id="BaseResultMap" type="com.zjg.blog.entity.ArticleComment">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="target_id" jdbcType="BIGINT" property="targetId" />
+    <result column="target_user_id" jdbcType="BIGINT" property="targetUserId" />
     <result column="article_id" jdbcType="BIGINT" property="articleId" />
-    <result column="create_by" jdbcType="TIMESTAMP" property="createBy" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
     <result column="is_effective" jdbcType="BIT" property="effective" />
     <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="is_inform" jdbcType="BIT" property="inform" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="create_by" jdbcType="TIMESTAMP" property="createBy" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,7 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, target_id, article_id, create_by, is_effective, content, ip
+    id, user_id, target_user_id, article_id, parent_id, is_effective, content, is_inform, 
+    email, create_by
   </sql>
   <select id="selectByExample" parameterType="com.zjg.blog.entity.ArticleCommentExample" resultMap="BaseResultMap">
     select
@@ -103,12 +106,14 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.zjg.blog.entity.ArticleComment" useGeneratedKeys="true">
-    insert into tbl_article_comment (user_id, target_id, article_id, 
-      create_by, is_effective, content, 
-      ip)
-    values (#{userId,jdbcType=BIGINT}, #{targetId,jdbcType=BIGINT}, #{articleId,jdbcType=BIGINT}, 
-      #{createBy,jdbcType=TIMESTAMP}, #{effective,jdbcType=BIT}, #{content,jdbcType=VARCHAR}, 
-      #{ip,jdbcType=VARCHAR})
+    insert into tbl_article_comment (user_id, target_user_id, article_id, 
+      parent_id, is_effective, content, 
+      is_inform, email, create_by
+      )
+    values (#{userId,jdbcType=BIGINT}, #{targetUserId,jdbcType=BIGINT}, #{articleId,jdbcType=BIGINT}, 
+      #{parentId,jdbcType=BIGINT}, #{effective,jdbcType=BIT}, #{content,jdbcType=VARCHAR}, 
+      #{inform,jdbcType=BIT}, #{email,jdbcType=VARCHAR}, #{createBy,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.zjg.blog.entity.ArticleComment" useGeneratedKeys="true">
     insert into tbl_article_comment
@@ -116,14 +121,14 @@
       <if test="userId != null">
         user_id,
       </if>
-      <if test="targetId != null">
-        target_id,
+      <if test="targetUserId != null">
+        target_user_id,
       </if>
       <if test="articleId != null">
         article_id,
       </if>
-      <if test="createBy != null">
-        create_by,
+      <if test="parentId != null">
+        parent_id,
       </if>
       <if test="effective != null">
         is_effective,
@@ -131,22 +136,28 @@
       <if test="content != null">
         content,
       </if>
-      <if test="ip != null">
-        ip,
+      <if test="inform != null">
+        is_inform,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="createBy != null">
+        create_by,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
       </if>
-      <if test="targetId != null">
-        #{targetId,jdbcType=BIGINT},
+      <if test="targetUserId != null">
+        #{targetUserId,jdbcType=BIGINT},
       </if>
       <if test="articleId != null">
         #{articleId,jdbcType=BIGINT},
       </if>
-      <if test="createBy != null">
-        #{createBy,jdbcType=TIMESTAMP},
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
       </if>
       <if test="effective != null">
         #{effective,jdbcType=BIT},
@@ -154,8 +165,14 @@
       <if test="content != null">
         #{content,jdbcType=VARCHAR},
       </if>
-      <if test="ip != null">
-        #{ip,jdbcType=VARCHAR},
+      <if test="inform != null">
+        #{inform,jdbcType=BIT},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -174,14 +191,14 @@
       <if test="record.userId != null">
         user_id = #{record.userId,jdbcType=BIGINT},
       </if>
-      <if test="record.targetId != null">
-        target_id = #{record.targetId,jdbcType=BIGINT},
+      <if test="record.targetUserId != null">
+        target_user_id = #{record.targetUserId,jdbcType=BIGINT},
       </if>
       <if test="record.articleId != null">
         article_id = #{record.articleId,jdbcType=BIGINT},
       </if>
-      <if test="record.createBy != null">
-        create_by = #{record.createBy,jdbcType=TIMESTAMP},
+      <if test="record.parentId != null">
+        parent_id = #{record.parentId,jdbcType=BIGINT},
       </if>
       <if test="record.effective != null">
         is_effective = #{record.effective,jdbcType=BIT},
@@ -189,8 +206,14 @@
       <if test="record.content != null">
         content = #{record.content,jdbcType=VARCHAR},
       </if>
-      <if test="record.ip != null">
-        ip = #{record.ip,jdbcType=VARCHAR},
+      <if test="record.inform != null">
+        is_inform = #{record.inform,jdbcType=BIT},
+      </if>
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -201,12 +224,14 @@
     update tbl_article_comment
     set id = #{record.id,jdbcType=BIGINT},
       user_id = #{record.userId,jdbcType=BIGINT},
-      target_id = #{record.targetId,jdbcType=BIGINT},
+      target_user_id = #{record.targetUserId,jdbcType=BIGINT},
       article_id = #{record.articleId,jdbcType=BIGINT},
-      create_by = #{record.createBy,jdbcType=TIMESTAMP},
+      parent_id = #{record.parentId,jdbcType=BIGINT},
       is_effective = #{record.effective,jdbcType=BIT},
       content = #{record.content,jdbcType=VARCHAR},
-      ip = #{record.ip,jdbcType=VARCHAR}
+      is_inform = #{record.inform,jdbcType=BIT},
+      email = #{record.email,jdbcType=VARCHAR},
+      create_by = #{record.createBy,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -217,14 +242,14 @@
       <if test="userId != null">
         user_id = #{userId,jdbcType=BIGINT},
       </if>
-      <if test="targetId != null">
-        target_id = #{targetId,jdbcType=BIGINT},
+      <if test="targetUserId != null">
+        target_user_id = #{targetUserId,jdbcType=BIGINT},
       </if>
       <if test="articleId != null">
         article_id = #{articleId,jdbcType=BIGINT},
       </if>
-      <if test="createBy != null">
-        create_by = #{createBy,jdbcType=TIMESTAMP},
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
       </if>
       <if test="effective != null">
         is_effective = #{effective,jdbcType=BIT},
@@ -232,8 +257,14 @@
       <if test="content != null">
         content = #{content,jdbcType=VARCHAR},
       </if>
-      <if test="ip != null">
-        ip = #{ip,jdbcType=VARCHAR},
+      <if test="inform != null">
+        is_inform = #{inform,jdbcType=BIT},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -241,12 +272,14 @@
   <update id="updateByPrimaryKey" parameterType="com.zjg.blog.entity.ArticleComment">
     update tbl_article_comment
     set user_id = #{userId,jdbcType=BIGINT},
-      target_id = #{targetId,jdbcType=BIGINT},
+      target_user_id = #{targetUserId,jdbcType=BIGINT},
       article_id = #{articleId,jdbcType=BIGINT},
-      create_by = #{createBy,jdbcType=TIMESTAMP},
+      parent_id = #{parentId,jdbcType=BIGINT},
       is_effective = #{effective,jdbcType=BIT},
       content = #{content,jdbcType=VARCHAR},
-      ip = #{ip,jdbcType=VARCHAR}
+      is_inform = #{inform,jdbcType=BIT},
+      email = #{email,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -5,6 +5,8 @@ import com.zjg.blog.entity.TagInfoExample;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+
 @Repository
 public interface TagInfoMapper {
     long countByExample(TagInfoExample example);
@@ -24,4 +26,6 @@ public interface TagInfoMapper {
     int updateByPrimaryKeySelective(TagInfo record);
 
     int updateByPrimaryKey(TagInfo record);
+
+    List<Map<String,Object>> selectNameAndNumber();
 }

@@ -4,8 +4,8 @@ import cn.hutool.core.bean.BeanUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zjg.blog.dao.*;
-import com.zjg.blog.dto.ArticlePreviewDto;
-import com.zjg.blog.dto.ArticleViewDto;
+import com.zjg.blog.dto.ArticlePreview;
+import com.zjg.blog.dto.ArticleView;
 import com.zjg.blog.entity.*;
 import com.zjg.blog.service.ArticleService;
 import com.zjg.blog.util.PageInfoUtil;
@@ -71,12 +71,12 @@ public class ArticleServiceImpl implements ArticleService {
      * @param daoList
      * @return
      */
-    private List<ArticlePreviewDto> assembleDtoList(List<ArticleInfo> daoList){
-        List<ArticlePreviewDto>dtoList=new ArrayList<>();
+    private List<ArticlePreview> assembleDtoList(List<ArticleInfo> daoList){
+        List<ArticlePreview>dtoList=new ArrayList<>();
         if(daoList.size()>0){
             for(ArticleInfo item:daoList){
                 CategoryInfo categoryInfo=categoryInfoMapper.selectByPrimaryKey(item.getCategoryId());
-                ArticlePreviewDto preview=new ArticlePreviewDto();
+                ArticlePreview preview=new ArticlePreview();
 
                 List<String> tagList=queryTags(item.getId());
                 BeanUtil.copyProperties(item,preview);
@@ -97,13 +97,13 @@ public class ArticleServiceImpl implements ArticleService {
      * @param pageSize
      * @return
      */
-    private PageInfo<ArticlePreviewDto> getPageInfo(ArticleInfoExample example, int pageNum, int pageSize){
+    private PageInfo<ArticlePreview> getPageInfo(ArticleInfoExample example, int pageNum, int pageSize){
 
         PageHelper.startPage(pageNum,pageSize);
         List<ArticleInfo>daoList=infoMapper.selectByExample(example);
         PageInfo<ArticleInfo> daoPageInfo=new PageInfo<>(daoList);
-        List<ArticlePreviewDto>dtoList=assembleDtoList(daoList);
-        PageInfo<ArticlePreviewDto> dtoPageInfo=new PageInfo<>(dtoList);
+        List<ArticlePreview>dtoList=assembleDtoList(daoList);
+        PageInfo<ArticlePreview> dtoPageInfo=new PageInfo<>(dtoList);
         PageInfoUtil.copyPageInfo(daoPageInfo,dtoPageInfo);
         return dtoPageInfo;
     }
@@ -173,17 +173,17 @@ public class ArticleServiceImpl implements ArticleService {
 ////////////////////////////////接口函数部分//////////////////////////////////
     /**
      * 添加新日志，需要维护多个表
-     * @param articleViewDto
+     * @param articleView
      * @return
      */
     @Override
-    public int insertArticle(ArticleViewDto articleViewDto) {
+    public int insertArticle(ArticleView articleView) {
         /**
          * 封装插入，注意对分类信息条目的影响
          */
         //封装info
         ArticleInfo info=new ArticleInfo();
-        BeanUtil.copyProperties(articleViewDto,info);
+        BeanUtil.copyProperties(articleView,info);
         info.setPrivated(false);
         info.setCreateBy(new Date());
         info.setModifiedBy(new Date());
@@ -191,14 +191,14 @@ public class ArticleServiceImpl implements ArticleService {
         //封装content
         ArticleContent content=new ArticleContent();
         content.setArticleId(info.getId());
-        content.setContent(articleViewDto.getContent());
+        content.setContent(articleView.getContent());
         content.setModifiedBy(new Date());
         content.setCreateBy(new Date());
         contentMapper.insert(content);
         //封装tags
-        insertTags(articleViewDto.getTagList(),info.getId());
+        insertTags(articleView.getTagList(),info.getId());
         //修改category
-        CategoryInfo categoryInfo=categoryInfoMapper.selectByPrimaryKey(articleViewDto.getCategoryId());
+        CategoryInfo categoryInfo=categoryInfoMapper.selectByPrimaryKey(articleView.getCategoryId());
         categoryInfo.setNumber(categoryInfo.getNumber()+1);
         categoryInfoMapper.updateByPrimaryKeySelective(categoryInfo);
         //修改图片所属id
@@ -243,7 +243,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public int updateArticle(ArticleViewDto dto) {
+    public int updateArticle(ArticleView dto) {
         /**
          * update需要注意分类的改变
          */
@@ -277,29 +277,37 @@ public class ArticleServiceImpl implements ArticleService {
         return 1;
     }
 
+
     @Override
-    public PageInfo queryPreviews(int pageNum,int pageSize) {
+    public PageInfo queryPreviews(int pageNum,int pageSize,String searchValue,String orderProperty,String orderDirection) {
+        /**
+         * 新特性：查询（支持多字段搜索）、排序
+         * update time：2020年4月1日18:29:55
+         * author:zjg
+         */
         ArticleInfoExample example=new ArticleInfoExample();
-        example.setOrderByClause("create_by desc");
+        example.setOrderByClause(orderProperty+" "+orderDirection);
+        example.createCriteria()
+                .andTitleLike("%"+searchValue+"%");
         return getPageInfo(example,pageNum,pageSize);
     }
 
     @Override
-    public PageInfo<ArticlePreviewDto> queryPublicPreviews(int pageNum, int pageSize) {
+    public PageInfo<ArticlePreview> queryPublicPreviews(int pageNum, int pageSize) {
         ArticleInfoExample example=new ArticleInfoExample();
         example.setOrderByClause("is_top desc, create_by desc");
         example.createCriteria().andPrivatedEqualTo(false);
-        PageInfo<ArticlePreviewDto> pageInfo=getPageInfo(example,pageNum,pageSize);
+        PageInfo<ArticlePreview> pageInfo=getPageInfo(example,pageNum,pageSize);
         return pageInfo;
     }
 
     @Override
-    public PageInfo<ArticlePreviewDto> queryPreviewsByCategory(long categoryId, int pageNum, int pageSize) {
+    public PageInfo<ArticlePreview> queryPreviewsByCategory(long categoryId, int pageNum, int pageSize) {
         ArticleInfoExample example=new ArticleInfoExample();
         example.setOrderByClause("create_by desc");
         example.createCriteria().andCategoryIdEqualTo(categoryId)
                 .andPrivatedEqualTo(false);
-        PageInfo<ArticlePreviewDto> pageInfo=getPageInfo(example,pageNum,pageSize);
+        PageInfo<ArticlePreview> pageInfo=getPageInfo(example,pageNum,pageSize);
         return pageInfo;
     }
 
@@ -307,7 +315,7 @@ public class ArticleServiceImpl implements ArticleService {
     /**
      * 查询tagId，获取articleId,获取articleInfo
      */
-    public PageInfo<ArticlePreviewDto> queryPreviewsByTagName(String tagName, int pageNum, int pageSize) {
+    public PageInfo<ArticlePreview> queryPreviewsByTagName(String tagName, int pageNum, int pageSize) {
        TagInfoExample tagInfoExample=new TagInfoExample();
        tagInfoExample.createCriteria().andNameEqualTo(tagName);
        TagInfo tagInfo=tagInfoMapper.selectByExample(tagInfoExample).get(0);
@@ -323,21 +331,36 @@ public class ArticleServiceImpl implements ArticleService {
            ArticleInfo articleInfo=infoMapper.selectByPrimaryKey(item.getArticleId());
            articleInfoList.add(articleInfo);
        }
-       List<ArticlePreviewDto> dtoList=assembleDtoList(articleInfoList);
+       List<ArticlePreview> dtoList=assembleDtoList(articleInfoList);
 
-       PageInfo<ArticlePreviewDto> dtoPageInfo=new PageInfo<>(dtoList);
+       PageInfo<ArticlePreview> dtoPageInfo=new PageInfo<>(dtoList);
        PageInfoUtil.copyPageInfo(daoPageInfo,dtoPageInfo);
        return dtoPageInfo;
     }
 
     @Override
-    public List<String> queryMonthList() {
+    public PageInfo<String> queryMonthList(int pageNum,int pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
         List<String> months=infoMapper.queryMonths();
-        return months;
+        PageInfo<String> pageInfo=new PageInfo<>(months);
+        return pageInfo;
     }
 
     @Override
-    public PageInfo<ArticlePreviewDto> queryPreviewsByBeginAndEndDate(Date beginDate, Date endDate,int pageNum, int pageSize) {
+    public long countMonths() {
+        return infoMapper.countMonths();
+    }
+
+    @Override
+    public long countArticleByBeginAndEndDate(Date beginDate, Date endDate) {
+        ArticleInfoExample articleInfoExample=new ArticleInfoExample();
+        articleInfoExample.createCriteria()
+                .andCreateByBetween(beginDate,endDate);
+        return infoMapper.countByExample(articleInfoExample);
+    }
+
+    @Override
+    public PageInfo<ArticlePreview> queryPreviewsByBeginAndEndDate(Date beginDate, Date endDate, int pageNum, int pageSize) {
         ArticleInfoExample articleInfoExample=new ArticleInfoExample();
         articleInfoExample.setOrderByClause("create_by desc");
         articleInfoExample.createCriteria().andCreateByBetween(beginDate,endDate);
@@ -346,17 +369,17 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public PageInfo<ArticlePreviewDto> queryPrivatedPreviews(int pageNum, int pageSize) {
+    public PageInfo<ArticlePreview> queryPrivatedPreviews(int pageNum, int pageSize) {
         ArticleInfoExample example=new ArticleInfoExample();
         example.setOrderByClause("create_by desc");
         ArticleInfoExample.Criteria criteria=example.createCriteria();
         criteria.andPrivatedEqualTo(true);
-        PageInfo<ArticlePreviewDto> pageInfo=getPageInfo(example,pageNum,pageSize);
+        PageInfo<ArticlePreview> pageInfo=getPageInfo(example,pageNum,pageSize);
         return pageInfo;
     }
 
     @Override
-    public ArticleViewDto getOneById(long id) {
+    public ArticleView getOneById(long id) {
         ArticleInfo info=infoMapper.selectByPrimaryKey(id);
         ArticleContentExample example=new ArticleContentExample();
         ArticleContentExample.Criteria criteria=example.createCriteria();
@@ -365,7 +388,7 @@ public class ArticleServiceImpl implements ArticleService {
         CategoryInfo categoryInfo=categoryInfoMapper.selectByPrimaryKey(info.getCategoryId());
         info.setTraffic(info.getTraffic()+1);
         infoMapper.updateByPrimaryKeySelective(info);
-        ArticleViewDto view=new ArticleViewDto();
+        ArticleView view=new ArticleView();
         BeanUtil.copyProperties(info,view);
         view.setTagList(queryTags(id));
         view.setCategoryName(categoryInfo.getName());
@@ -406,4 +429,5 @@ public class ArticleServiceImpl implements ArticleService {
         criteria.andPrivatedEqualTo(false);
         return infoMapper.countByExample(example);
     }
+
 }

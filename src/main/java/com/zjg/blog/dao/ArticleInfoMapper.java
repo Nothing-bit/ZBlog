@@ -24,4 +24,7 @@ public interface ArticleInfoMapper {
     int updateByPrimaryKey(ArticleInfo record);
 
     List<String> queryMonths();
+
+    int countMonths();
+
 }

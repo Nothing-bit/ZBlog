@@ -9,13 +9,17 @@ public class Comment {
 
     private Boolean effective;
 
-    private Long targetId;
+    private Long parentId;
+
+    private Long targetUserId;
 
     private String content;
 
-    private Date createBy;
+    private Boolean inform;
 
-    private String ip;
+    private String email;
+
+    private Date createBy;
 
     public Long getId() {
         return id;
@@ -41,12 +45,20 @@ public class Comment {
         this.effective = effective;
     }
 
-    public Long getTargetId() {
-        return targetId;
+    public Long getParentId() {
+        return parentId;
     }
 
-    public void setTargetId(Long targetId) {
-        this.targetId = targetId;
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public Long getTargetUserId() {
+        return targetUserId;
+    }
+
+    public void setTargetUserId(Long targetUserId) {
+        this.targetUserId = targetUserId;
     }
 
     public String getContent() {
@@ -57,19 +69,27 @@ public class Comment {
         this.content = content == null ? null : content.trim();
     }
 
+    public Boolean getInform() {
+        return inform;
+    }
+
+    public void setInform(Boolean inform) {
+        this.inform = inform;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
+    }
+
     public Date getCreateBy() {
         return createBy;
     }
 
     public void setCreateBy(Date createBy) {
         this.createBy = createBy;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip == null ? null : ip.trim();
     }
 }

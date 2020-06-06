@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -7,15 +7,27 @@
     <link rel="stylesheet" href="/fore/assets/css/layui.css">
     <link rel="icon" href="/fore/assets/images/favicon.ico" >
     <link rel="stylesheet" href="/fore/assets/icon/iconfont.css">
+    <link rel="stylesheet" href="/fore/assets/css/animate.css">
+    <style>
+        .list-complete-item {
+            transition: all 1s;
+        }
+        .list-complete-leave-to{
+            display: none;
+        }
+        .list-complete-leave-active {
+            position: absolute;
+        }
+    </style>
 </head>
 <body class="layui-bg-gray">
 <!--导航栏-->
 <div class="layui-row ">
     <ul class="layui-nav layui-icon-align-center" style="text-align: center;">
         <li class="layui-nav-item "><a href="/fore/index/page"  style="font-size: 17px;"><i class="layui-icon layui-icon-home" style="padding-right: 5px;"></i>主页</a></li>
-        <li class="layui-nav-item layui-this"><a href="/fore/category/page" style="font-size: 17px;"><i class="layui-icon layui-icon-app" style="padding-right: 5px;"></i>分类</a></li>
+        <li class="layui-nav-item layui-this"><a href="/fore/category/page/0" style="font-size: 17px;"><i class="layui-icon layui-icon-app" style="padding-right: 5px;"></i>分类</a></li>
         <li class="layui-nav-item "><a href="/fore/tag/page" style="font-size: 17px;"><i class="layui-icon layui-icon-note" style="padding-right: 5px;"></i>标签</a></li>
-        <li class="layui-nav-item "><a href="/fore/archive/page" style="font-size: 17px;"><i class="layui-icon layui-icon-chart" style="padding-right: 5px;"></i>归档</a></li>
+        <li class="layui-nav-item "><a href="/fore/archive/page?month=all" style="font-size: 17px;"><i class="layui-icon layui-icon-date" style="padding-right: 5px;"></i>归档</a></li>
         <li class="layui-nav-item "><a href="/fore/about/page" style="font-size: 17px;"><i class="layui-icon layui-icon-more" style="padding-right: 5px;"></i>关于</a></li>
     </ul>
 </div>
@@ -27,52 +39,78 @@
                 <div class="layui-row">
                     <!--第一列，左侧导航栏-->
                     <div class="layui-col-lg3 "  >
-                        <div class="layui-row" style="padding:20px;">
+                        <div class="layui-row animated bounceInLeft" style="padding:20px;">
                             <fieldset class="layui-elem-field ">
                                 <legend>分类</legend>
-                                <div class="layui-card-body" style="text-align: center">
-                                    <div class="layui-row" th:each="item:${categoryList}">
-                                        <a href=" javascript:void (0)" th:onclick="changeCategory([[${item.id}]])">
-                                            <span th:text="${item.name}"></span>
-                                            <span th:text="'('+${item.number}+')'" style="padding-right:5px;"></span>
-                                        </a>
-                                        <hr>
+                                <div class="layui-row" id="menuDiv" style="display: none">
+                                    <div class="layui-card-body" style="text-align: center" id="menuModule">
+                                        <div class="layui-row" >
+                                            <a class="layui-btn layui-btn-checked"style="width: 150px;"  href="/fore/category/page/0">
+                                                <span >全 部</span>
+                                            </a>
+                                            <hr>
+                                        </div>
+                                        <transition-group name="list-complete" appear
+                                                          appear-active-class="animated fadeInLeft"
+                                                          enter-active-class="animated fadeInLeft">
+                                            <div class="layui-row list-complete-item" v-for="item in items" v-bind:key="item">
+                                                <a class="layui-btn layui-btn-primary"style="width: 150px;" v-bind:href="'/fore/category/page/'+item.id">
+                                                    <span>{{item.name}}</span>
+                                                    <span style="padding-right:5px;">({{item.number}})</span>
+                                                </a>
+                                                <hr>
+                                            </div>
+                                        </transition-group>
+                                    </div>
+                                    <div class="layui-row" style="text-align: center;">
+                                        <div id="menuPageSpliter"></div>
                                     </div>
                                 </div>
                             </fieldset>
                         </div>
                     </div>
                     <!--第二列，中间内容-->
-                    <div class="layui-col-lg9 " style="padding: 10px;">
-                        <div class="layui-row">
-                            <ul class="layui-timeline" id="previewModule" style="display: none">
-                                <!--简略信息模块-->
-                                <li class="layui-timeline-item layui-anim layui-anim-upbit" v-for="item in items">
-                                    <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
-                                    <div class="layui-timeline-content layui-text">
-                                        <fieldset class="layui-elem-field layui-timeline-title">
-                                            <legend><a style="color: rgb(102,102,102)"  v-bind:href="'/fore/article/page/'+item.id" >{{item.title}}</a></legend>
-                                            <div class="layui-field-box">
-                                                <div class="layui-row">
-                                                    <div class="layui-col-lg2">
-                                                        <i class="layui-icon layui-icon-date" style="padding-right: 5px;"></i><span>{{item.createBy}}</span>
-                                                    </div>
-                                                    <div class="layui-col-lg1">
-                                                        <i class="iconfont icon-eye" style="padding-right: 5px;"></i><span>{{item.traffic}}</span>
-                                                    </div>
-                                                    <div class="layui-col-lg6">
-                                                        <i class="layui-icon layui-icon-note" style="padding-right: 5px;"></i>
-                                                        <a style="color:rgb(102,102,102) " v-for="tagItem in item.tagList" v-bind:href="'/fore/article/tag/page?tagName='+tagItem">{{tagItem}}  </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                </li>
-                            </ul>
+                    <div class="layui-col-lg9 animated bounceInUp" style="padding: 10px;">
+                        <div class="layui-row" style="padding: 10px;">
+                            <i class="layui-icon layui-icon-app"></i><span style="font-size: 18px;color: rgb(95,184,120)" th:text="' # '+${categoryName}"></span>
                         </div>
-                        <div class="layui-row" style="text-align: center;" id="pageSpliterDiv">
-                            <div id="pageSpliter"></div>
+                        <div class="layui-row" id="previewDiv" style="display: none">
+
+                            <div class="layui-row" >
+                                <ul class="layui-timeline" id="previewModule" >
+                                    <!--简略信息模块-->
+                                    <transition-group name="list-complete"
+                                                      appear
+                                                      appear-active-class="animated zoomInUp"
+                                                      enter-active-class="animated zoomInUp">
+                                        <li class="layui-timeline-item list-complete-item" v-for="item in items" v-bind:key="item">
+                                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                            <div class="layui-timeline-content layui-text">
+                                                <fieldset class="layui-elem-field layui-timeline-title">
+                                                    <legend><a style="color: rgb(102,102,102)"  v-bind:href="'/fore/article/page/'+item.id" >{{item.title}}</a></legend>
+                                                    <div class="layui-field-box">
+                                                        <div class="layui-row">
+                                                            <div class="layui-col-lg2">
+                                                                <i class="layui-icon layui-icon-date" style="padding-right: 5px;"></i><span>{{item.createBy}}</span>
+                                                            </div>
+                                                            <div class="layui-col-lg1">
+                                                                <i class="iconfont icon-eye" style="padding-right: 5px;"></i><span>{{item.traffic}}</span>
+                                                            </div>
+                                                            <div class="layui-col-lg6">
+                                                                <i class="layui-icon layui-icon-note" style="padding-right: 5px;"></i>
+                                                                <a style="color:rgb(102,102,102) " v-for="tagItem in item.tagList" v-bind:href="'/fore/article/tag/page?tagName='+tagItem">{{tagItem}}&nbsp</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </li>
+                                    </transition-group>
+                                </ul>
+                            </div>
+                            <div class="layui-row" style="text-align: center;">
+                                <div id="previewPageSpliter"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -85,66 +123,23 @@
     <div class="layui-col-lg4 layui-col-lg-offset4" style="padding: 20px;text-align: center;line-height: 25px;">
         <span >@CopyRight 2019 ZhouJianGuo版权所有</span>
         <br>
-        <a href="http://beian.miit.gov.cn"><span style="color: white">苏ICP备19061991号</span></a>
+        <a target="_blank" href="http://beian.miit.gov.cn"><span style="color: white">苏ICP备19061991号</span></a>
     </div>
 </div>
 <!--script配置-->
 <script opacity="0.9"  src="/fore/assets/js/canvas-nest.js"></script>
-<script src="/fore/assets/js/vue.js"></script>
+<script src="/fore/assets/js/vue.min.js"></script>
 <script src="/fore/assets/layui.js"></script>
-<script>
+<script th:inline="javascript">
     //注意：导航 依赖 element 模块，否则无法进行功能性操作
     var total=[[${total}]]
     var pageSize=[[${pageSize}]]
+    var categoryId=[[${categoryId}]]
     var previewModule=null;
-    var categoryId=0
-    function changeCategory(data){
-        categoryId=data;
-        var $=layui.jquery
-        var laypage=layui.laypage;
-        $('#previewModule').fadeOut(0)
-        $.ajax({
-            dataType:'json',
-            type:'get',
-            url:'/fore/category/article/list/'+categoryId+'/'+1+"?isAll=false",
-            async:false,
-            success:function (result) {
-                // layer.msg(JSON.stringify(result))
-                if(result.code==200){
-                    total=result.pageInfo.total
-                    pageSize=result.pageInfo.pageSize
-                    previewModule.items=result.pageInfo.list
-                    $('#previewModule').fadeIn()
-                }
-            }
-        })
-        laypage.render({
-            elem:'pageSpliter',
-            curr:1,
-            count:total,
-            limit:pageSize,
-            jump:function (obj,first) {
-                if(!first){
-                    $('#previewModule').fadeOut(0)
-                    $.ajax({
-                        dataType:'json',
-                        type:'get',
-                        url:'/fore/category/article/list/'+categoryId+'/'+obj.curr+"?isAll=false",
-                        success:function (result) {
-                            // layer.msg(JSON.stringify(result))
-                            if(result.code==200){
-                                previewModule.items=result.pageInfo.list
-                                $('#previewModule').fadeIn()
-                                $('#pageSpliterDiv').fadeIn()
-                            }
-                        }
-                    })
-                }
-            }
-        })
-    }
-
-    layui.use(['util','laypage','jquery'],function () {
+    var menuModule=null;
+    var menuTotal=[[${menuTotal}]]
+    var menuPageSize=[[${menuPageSize}]]
+    layui.use(['element','util','laypage','jquery'],function () {
         var util=layui.util;
         util.fixbar({
             top:true,
@@ -154,20 +149,54 @@
         })
         var $=layui.jquery
         var laypage=layui.laypage;
+        //menu分页
+
         laypage.render({
-            elem:'pageSpliter',
+            elem:'menuPageSpliter',
             curr:1,
-            count:total,
-            limit:pageSize,
+            count:menuTotal,
+            limit:menuPageSize,
+            prev:'<',
+            next:'>',
+            layout:['prev','next'],
             jump:function (obj,first) {
-                $("#previewModule").fadeOut(0)
                 $.ajax({
                     dataType:'json',
                     type:'get',
-                    url:'/fore/category/article/list/'+categoryId+'/'+obj.curr+"?isAll=true",
+                    url:'/fore/category/list/'+obj.curr,
                     success:function (result) {
-                        // layer.msg(JSON.stringify(result))
+                        $("#menuDiv").show()
                         if(result.code==200){
+                            if(first){
+                                menuModule=new Vue({
+                                    el:'#menuModule',
+                                    data:{
+                                        items:result.pageInfo.list
+                                    }
+                                })
+                            }else{
+                                menuModule.items=result.pageInfo.list
+                            }
+                        }
+                    }
+                })
+            }
+        })
+        //preview分页
+        laypage.render({
+            elem:'previewPageSpliter',
+            curr:1,
+            count:total,
+            limit:pageSize,
+            layout:['prev','page','next','skip','count'],
+            jump:function (obj,first) {
+                $.ajax({
+                    dataType:'json',
+                    type:'get',
+                    url:'/fore/category/article/list/'+categoryId+'/'+obj.curr,
+                    success:function (result) {
+                        if(result.code==200){
+                            $("#previewDiv").show();
                             if(first){
                                 previewModule=new Vue({
                                     el:'#previewModule',
@@ -175,11 +204,9 @@
                                         items:result.pageInfo.list
                                     }
                                 })
-                                $('#pageSpliterDiv').fadeIn()
                             }else{
                                 previewModule.items=result.pageInfo.list
                             }
-                            $('#previewModule').fadeIn()
                         }
                     }
                 })

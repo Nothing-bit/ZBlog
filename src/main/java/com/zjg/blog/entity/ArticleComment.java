@@ -7,17 +7,21 @@ public class ArticleComment {
 
     private Long userId;
 
-    private Long targetId;
+    private Long targetUserId;
 
     private Long articleId;
 
-    private Date createBy;
+    private Long parentId;
 
     private Boolean effective;
 
     private String content;
 
-    private String ip;
+    private Boolean inform;
+
+    private String email;
+
+    private Date createBy;
 
     public Long getId() {
         return id;
@@ -35,12 +39,12 @@ public class ArticleComment {
         this.userId = userId;
     }
 
-    public Long getTargetId() {
-        return targetId;
+    public Long getTargetUserId() {
+        return targetUserId;
     }
 
-    public void setTargetId(Long targetId) {
-        this.targetId = targetId;
+    public void setTargetUserId(Long targetUserId) {
+        this.targetUserId = targetUserId;
     }
 
     public Long getArticleId() {
@@ -51,12 +55,12 @@ public class ArticleComment {
         this.articleId = articleId;
     }
 
-    public Date getCreateBy() {
-        return createBy;
+    public Long getParentId() {
+        return parentId;
     }
 
-    public void setCreateBy(Date createBy) {
-        this.createBy = createBy;
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
     public Boolean getEffective() {
@@ -75,11 +79,27 @@ public class ArticleComment {
         this.content = content == null ? null : content.trim();
     }
 
-    public String getIp() {
-        return ip;
+    public Boolean getInform() {
+        return inform;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip == null ? null : ip.trim();
+    public void setInform(Boolean inform) {
+        this.inform = inform;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
+    }
+
+    public Date getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(Date createBy) {
+        this.createBy = createBy;
     }
 }

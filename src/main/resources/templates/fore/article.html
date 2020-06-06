@@ -9,7 +9,19 @@
     <link rel="stylesheet" href="/fore/assets/css/default.css">
     <script src="/fore/assets/js/highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/fore/assets/js/vue.js"></script>
+    <script src="/fore/assets/js/vue.min.js"></script>
+    <link rel="stylesheet" href="/fore/assets/css/animate.css">
+    <style>
+        .list-complete-item {
+            transition: all 1s;
+        }
+        .list-complete-leave-to {
+            display: none;
+        }
+        .list-complete-leave-active {
+            position: absolute;
+        }
+    </style>
 </head>
 
 <body class="layui-bg-gray" >
@@ -17,9 +29,9 @@
 <div class="layui-row ">
     <ul class="layui-nav layui-icon-align-center" style="text-align: center;">
         <li class="layui-nav-item "><a href="/fore/index/page"  style="font-size: 17px;"><i class="layui-icon layui-icon-home" style="padding-right: 5px;"></i>主页</a></li>
-        <li class="layui-nav-item "><a href="/fore/category/page" style="font-size: 17px;"><i class="layui-icon layui-icon-app" style="padding-right: 5px;"></i>分类</a></li>
+        <li class="layui-nav-item "><a href="/fore/category/page/0" style="font-size: 17px;"><i class="layui-icon layui-icon-app" style="padding-right: 5px;"></i>分类</a></li>
         <li class="layui-nav-item "><a href="/fore/tag/page" style="font-size: 17px;"><i class="layui-icon layui-icon-note" style="padding-right: 5px;"></i>标签</a></li>
-        <li class="layui-nav-item "><a href="/fore/archive/page" style="font-size: 17px;"><i class="layui-icon layui-icon-chart" style="padding-right: 5px;"></i>归档</a></li>
+        <li class="layui-nav-item "><a href="/fore/archive/page?month=all" style="font-size: 17px;"><i class="layui-icon layui-icon-date" style="padding-right: 5px;"></i>归档</a></li>
         <li class="layui-nav-item "><a href="/fore/about/page" style="font-size: 17px;"><i class="layui-icon layui-icon-more" style="padding-right: 5px;"></i>关于</a></li>
     </ul>
 </div>
@@ -28,7 +40,7 @@
     <!--第二列-->
     <div class="layui-col-lg10 layui-col-lg-offset1" style="padding: 10px;">
         <!--日志主体部分-->
-        <div class="layui-card layui-anim layui-anim-scale" style="padding: 15px">
+        <div class="layui-card layui-anim layui-anim-scaleSpring" style="padding: 15px">
 
             <div class="layui-card-header" style="text-align: center;padding: 20px;">
                 <h1 th:text="${articleDetail.title}"></h1>
@@ -53,6 +65,10 @@
                     <div class="layui-field-box">
                         <div class="layui-row">
                             <div class="layui-row" style="text-align: justify;padding: 40px;line-height:30px;" th:utext="${articleDetail.content}"></div>
+<!--                            打赏模块-->
+<!--                            <div class="layui-row" style="text-align: center;padding: 15px;">-->
+<!--                                <button class="layui-btn layui-btn-lg layui-btn-radius layui-btn-primary" onclick="award()">赏</button>-->
+<!--                            </div>-->
                             <blockquote class="layui-elem-quote layui-col-lg6 layui-col-lg-offset3" style="line-height: 30px;">
                                 <span>版权声明：本站所有文章除特别声明外,转载请注明出处！</span>
                                 <br>
@@ -83,9 +99,6 @@
                         <div class="layui-row">
                             <div class="layui-col-lg6 layui-col-lg-offset3" th:if="${session.userInfo} == null">
                                 <div class="layui-row" style="padding: 20px;text-align: center">
-<!--                                    <div class="layui-row">-->
-<!--                                        <i class="layui-icon layui-icon-face-smile-b " style="font-size: 90px;color: #00BE67"></i>-->
-<!--                                    </div>-->
                                     <div class="layui-row" style="padding: 10px;">
                                         <span >请先登录后再发表评论~</span>
                                     </div>
@@ -109,15 +122,21 @@
                                             <textarea name="content" placeholder="友善的评论是交流的起点···" lay-verify="required" class="layui-textarea"></textarea>
                                         </div>
                                     </div>
-                                    <!--<div class="layui-form-item">-->
-                                        <!--<label class="layui-form-label">滑动验证</label>-->
-                                        <!--<div class="layui-input-block">-->
-                                            <!--<div id="commentSlider"></div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label"style="text-align: center">当评论被回复时，请通知我</label>
+                                        <div class="layui-input-block" >
+                                            <input type="checkbox"  lay-filter="informArticleComment" name="inform" lay-skin="switch" lay-text="通知|不通知">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">通知邮箱：</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" id="emailArticleComment" name="email"  autocomplete="true" class="layui-input">
+                                        </div>
+                                    </div>
                                     <div class="layui-form-item">
                                         <div class="layui-input-block" style="text-align: center">
-                                            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                                            <button class="layui-btn" lay-submit lay-filter="formArticleComment">立即提交</button>
                                             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                                         </div>
                                     </div>
@@ -147,43 +166,48 @@
                         <!--评论展示-->
                         <div class="layui-row"   style="padding-left: 40px;padding-right: 40px;" id="commentModule">
                             <!--评论模块-->
-                            <div class="layui-col-lg8 layui-col-lg-offset2" v-for="item in items">
-                                <div class="layui-row">
-                                    <div class="layui-col-lg4" >
-                                        <img class="layui-circle" style="width: 30px" v-bind:src="item.avatar">
-                                        <span style="font-size: 15px;color: rgb(0,150,136)">{{item.username}}</span>
-                                    </div>
-                                    <div class="layui-col-lg4 layui-col-lg-offset4"  style="text-align: right">
-                                        <span>评论于</span>
-                                        <span >{{item.createBy}}</span>
-                                    </div>
-                                </div>
-                                <div class="layui-row" style="padding-left: 30px;padding-top: 10px;padding-bottom: 10px;">
-                                    <span >{{item.content}}</span>
-                                </div>
-                                <div class="layui-row" style="padding-left: 30px;padding-top: 5px;padding-bottom: 5px;">
-                                    <i class="layui-icon layui-icon-dialogue"></i><a v-on:click="reply(item.id,item.username)" style="color:rgb(0,132,255)" href="javascript:void(0)">回复</a>
-                                </div>
-                                <!--子回复模块-->
-                                <div class="layui-row"style="padding-left: 30px;" id="replyModule">
-                                    <blockquote class="layui-elem-quote " style="background-color: white" v-for="childItem in item.replyList">
-                                        <div class="layui-row">
-                                            <div class="layui-col-lg4" >
-                                                <img class="layui-circle" style="width: 30px" v-bind:src="childItem.avatar">
-                                                <span style="font-size: 15px;color: rgb(0,150,136)">{{childItem.username}}</span>
-                                            </div>
-                                            <div class="layui-col-lg4 layui-col-lg-offset4" style="text-align: right">
-                                                <span>回复于</span>
-                                                <span >{{childItem.createBy}}</span>
-                                            </div>
+                            <transition-group name="list-complete" enter-active-class="animated lightSpeedIn">
+                                <div class="layui-col-lg8 layui-col-lg-offset2 list-complete-item" v-for="articleCommentItem in items"v-bind:key="articleCommentItem">
+                                    <div class="layui-row">
+                                        <div class="layui-col-lg4" >
+                                            <img class="layui-circle" style="width: 30px" v-bind:src="articleCommentItem.avatar">
+                                            <span style="font-size: 15px;color: rgb(0,150,136)">{{articleCommentItem.username}}</span>
                                         </div>
-                                        <div class="layui-row" style="padding-left: 30px;padding-top: 10px;padding-bottom: 10px;">
-                                            <span>{{childItem.content}}</span>
+                                        <div class="layui-col-lg4 layui-col-lg-offset4"  style="text-align: right">
+                                         <span>评论于</span>
+                                            <span >{{articleCommentItem.createBy}}</span>
                                         </div>
-                                    </blockquote>
+                                    </div>
+                                    <div class="layui-row" style="padding-left: 30px;padding-top: 10px;padding-bottom: 10px;">
+                                        <span >{{articleCommentItem.content}}</span>
+                                    </div>
+                                    <div class="layui-row" style="padding-left: 30px;padding-top: 5px;padding-bottom: 5px;">
+                                        <i class="layui-icon layui-icon-dialogue"></i><a v-on:click="reply(articleCommentItem.userId,articleCommentItem.username,articleCommentItem.id)" style="color:rgb(0,132,255)" href="javascript:void(0)">回复</a>
+                                       </div>
+                                    <!--子回复模块-->
+                                    <div class="layui-row"style="padding-left: 30px;" id="replyModule">
+                                        <blockquote class="layui-elem-quote " style="background-color: white" v-for="replyItem in articleCommentItem.replyList">
+                                            <div class="layui-row">
+                                                <div class="layui-col-lg4" >
+                                                    <img class="layui-circle" style="width: 30px" v-bind:src="replyItem.avatar">
+                                                    <span style="font-size: 15px;color: rgb(0,150,136)">{{replyItem.username}}</span>
+                                                </div>
+                                                <div class="layui-col-lg4 layui-col-lg-offset4" style="text-align: right">
+                                                    <span>回复于</span>
+                                                    <span >{{replyItem.createBy}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="layui-row" style="padding-left: 30px;padding-top: 10px;padding-bottom: 10px;">
+                                                <span style="color:rgb(0,132,255)">@{{replyItem.targetUsername}}&nbsp</span><span>{{replyItem.content}}</span>
+                                            </div>
+                                            <div class="layui-row" style="padding-left: 30px;padding-top: 5px;padding-bottom: 5px;">
+                                                <i class="layui-icon layui-icon-dialogue"></i><a v-on:click="reply(replyItem.userId,replyItem.username,articleCommentItem.id)" style="color:rgb(0,132,255)" href="javascript:void(0)">回复</a>
+                                            </div>
+                                        </blockquote>
+                                    </div>
+                                    <hr class="layui-bg-gray">
                                 </div>
-                                <hr class="layui-bg-gray">
-                            </div>
+                            </transition-group>
                         </div>
                     </div>
                 </fieldset>
@@ -217,18 +241,24 @@
         <label class='layui-form-label'>回复内容</label>
         <div class='layui-input-block'>
             <input name='targetId' id="targetId"  style='display: none'>
-            <textarea name='content' placeholder='友善的评论是交流的起点···' lay-verify='required' class='layui-textarea' maxlength="400"></textarea>
+            <textarea name='content' placeholder='友善的回复是交流的起点···' lay-verify='required' class='layui-textarea' maxlength="400"></textarea>
         </div>
     </div>
-    <!--<div class="layui-form-item">-->
-        <!--<label class="layui-form-label">滑动验证</label>-->
-        <!--<div class="layui-input-block">-->
-            <!--<div id="replySlider"></div>-->
-        <!--</div>-->
-    <!--</div>-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"style="text-align: center">当评论被回复时，请通知我</label>
+        <div class="layui-input-block" >
+            <input type="checkbox"  lay-filter="informReply" name="inform" lay-skin="switch" lay-text="通知|不通知">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">通知邮箱：</label>
+        <div class="layui-input-inline">
+            <input type="text" id="emailReply" name="email"  autocomplete="true" class="layui-input">
+        </div>
+    </div>
     <div class='layui-form-item'>
         <div  style='text-align: center'>
-            <button class='layui-btn' lay-submit lay-filter='formDemo'>立即提交</button>
+            <button class='layui-btn' lay-submit lay-filter='formReply'>立即提交</button>
             <button type='reset' class='layui-btn layui-btn-primary'>重置</button>
         </div>
     </div>
@@ -243,7 +273,7 @@
     <div class="layui-col-lg4 layui-col-lg-offset4" style="padding: 20px;text-align: center;line-height: 25px;">
         <span >@CopyRight 2019 ZhouJianGuo版权所有</span>
         <br>
-        <a href="http://beian.miit.gov.cn"><span style="color: white">苏ICP备19061991号</span></a>
+        <a target="_blank" href="http://beian.miit.gov.cn"><span style="color: white">苏ICP备19061991号</span></a>
     </div>
 </div>
 <!--script配置-->
@@ -259,35 +289,50 @@
         var util=layui.util;
         var $=layui.jquery;
         window.$=$
+        //右下按钮
         util.fixbar({
             top:true,
             css: { right: 15, bottom: 35 },
             bgcolor: '#A4A4A4',
             showHeight:100,
         })
+
         var form = layui.form;
-
-        var sliderVerify = layui.sliderVerify
+        //监听comment switch控件
+        form.on('switch(informArticleComment)', function(data){
+            if(data.elem.checked){//开启邮件通知
+                $('#emailArticleComment').prop('disabled',false)
+            }else{
+                $('#emailArticleComment').prop('disabled',true)
+                $('#emailArticleComment').val("")
+            }
+        });
+        //监听reply switch控件
+        form.on('switch(informReply)', function(data){
+            if(data.elem.checked){//开启邮件通知
+                $('#emailReply').prop('disabled',false)
+            }else{
+                $('#emailReply').prop('disabled',true)
+                $('#emailReply').val("")
+            }
+        });
+        //提交评论处理表单
         var articleId=[[${articleDetail.id}]]
-
-        // var commentSlider = sliderVerify.render({
-        //     elem: '#commentSlider',
-        //     onOk: function(){//当验证通过回调
-        //         layer.msg("滑块验证通过",{icon:6});
-        //     }
-        // })
-        // var replySlider=sliderVerify.render({
-        //     elem: '#replySlider',
-        //     onOk: function(){//当验证通过回调
-        //         layer.msg("滑块验证通过",{icon:6});
-        //     }
-        // })
-        form.on('submit(formDemo)', function(data){
-           // if(commentSlider.isOk()||replySlider.isOk()){//用于表单验证是否已经滑动成功
-                data.field.articleId=articleId
+        var targetUserId=0
+        var parentId=0
+        form.on('submit(formArticleComment)', function(data){
+                var submitData={};
+                submitData.content=data.field.content;
+                if(data.field.inform){
+                    submitData.inform=true;
+                }else{
+                    submitData.inform=false;
+                }
+                submitData.email=data.field.email
+                submitData.articleId=articleId;
                 $.ajax({
                     contentType:'application/json',
-                    data:JSON.stringify(data.field),
+                    data:JSON.stringify(submitData),
                     dataType:'json',
                     type:'post',
                     url:'/fore/article/comment',
@@ -295,27 +340,40 @@
                         if(data.code==200){
                             layer.msg('提交评论成功！请等待审核！',{icon: 6})
                             setTimeout("location.reload()",3000)
-                    //        commentSlider.reset();
-                    //        replySlider.reset();
                         }
                     }
                 })
-         //   }else{
-        //        layer.msg("请先通过滑块验证");
-          //  }
             return false;
         });
-
-
-
-        var util=layui.util;
-        util.fixbar({
-            top:true,
-            css: { right: 15, bottom: 35 },
-            bgcolor: '#A4A4A4',
-            showHeight:100,
-        })
-
+        //提交回复处理表单
+        form.on('submit(formReply)', function(data){
+            var submitData={};
+            submitData.content=data.field.content;
+            if(data.field.inform){
+                submitData.inform=true;
+            }else{
+                submitData.inform=false;
+            }
+            submitData.email=data.field.email;
+            submitData.targetUserId=targetUserId;
+            submitData.parentId=parentId;
+            submitData.articleId=articleId;
+            $.ajax({
+                contentType:'application/json',
+                data:JSON.stringify(submitData),
+                dataType:'json',
+                type:'post',
+                url:'/fore/article/comment/reply',
+                success:function (data) {
+                    if(data.code==200){
+                        layer.msg('提交回复成功！请等待审核！',{icon: 6})
+                        setTimeout("location.reload()",3000)
+                    }
+                }
+            })
+            return false;
+        });
+        //分页渲染
         var commentModule=null;
 
         var laypage=layui.laypage;
@@ -341,9 +399,11 @@
                                         items:result.pageInfo.list
                                     },
                                     methods:{
-                                        reply(id,username){
+                                        reply(userId,username,id){
+                                            targetUserId=userId;
+                                            parentId=id;
                                             if(checkLogin()==1){
-                                                reply(id,username)
+                                                reply(username)
                                             }
                                         }
                                     }
@@ -357,6 +417,15 @@
             }
         })
     })
+    // function award() {
+    //     layer.alert('test',{
+    //         skin: 'layui-layer-lan' //样式类名
+    //         ,closeBtn: 1
+    //         ,title:'打赏作者'
+    //         ,confirm:0
+    //     })
+    // }
+
 
 
 </script>

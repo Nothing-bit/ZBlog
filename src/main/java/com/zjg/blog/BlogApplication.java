@@ -1,15 +1,9 @@
 package com.zjg.blog;
 
 
-import org.apache.catalina.Context;
-import org.apache.catalina.connector.Connector;
-import org.apache.tomcat.util.descriptor.web.SecurityCollection;
-import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication(scanBasePackages = "com.zjg.blog")
 @MapperScan("com.zjg.blog.dao")//告诉spring boot 扫描包位置
@@ -34,7 +28,7 @@ public class BlogApplication {
 //        tomcat.addAdditionalTomcatConnectors(httpConnector());
 //        return tomcat;
 //    }
-//
+
 //    @Bean
 //    public Connector httpConnector() {
 //        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");

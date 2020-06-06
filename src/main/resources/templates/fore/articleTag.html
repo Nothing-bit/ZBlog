@@ -5,63 +5,82 @@
     <link rel="stylesheet" href="/fore/assets/css/layui.css">
     <link rel="icon" href="/fore/assets/images/favicon.ico" type="icon">
     <link rel="stylesheet" href="/fore/assets/icon/iconfont.css">
+    <link rel="stylesheet" href="/fore/assets/css/animate.css">
+    <style>
+        .list-complete-item {
+            transition: all 1s;
+        }
+        .list-complete-leave-to{
+            display:none
+        }
+        .list-complete-leave-active {
+            position: absolute;
+        }
+    </style>
 </head>
 <body class="layui-bg-gray" >
 <!--导航栏-->
 <div class="layui-row ">
     <ul class="layui-nav layui-icon-align-center" style="text-align: center;">
         <li class="layui-nav-item "><a href="/fore/index/page"  style="font-size: 17px;"><i class="layui-icon layui-icon-home" style="padding-right: 5px;"></i>主页</a></li>
-        <li class="layui-nav-item "><a href="/fore/category/page" style="font-size: 17px;"><i class="layui-icon layui-icon-app" style="padding-right: 5px;"></i>分类</a></li>
+        <li class="layui-nav-item "><a href="/fore/category/page/0" style="font-size: 17px;"><i class="layui-icon layui-icon-app" style="padding-right: 5px;"></i>分类</a></li>
         <li class="layui-nav-item "><a href="/fore/tag/page" style="font-size: 17px;"><i class="layui-icon layui-icon-note" style="padding-right: 5px;"></i>标签</a></li>
-        <li class="layui-nav-item "><a href="/fore/archive/page" style="font-size: 17px;"><i class="layui-icon layui-icon-chart" style="padding-right: 5px;"></i>归档</a></li>
+        <li class="layui-nav-item "><a href="/fore/archive/page?month=all" style="font-size: 17px;"><i class="layui-icon layui-icon-date" style="padding-right: 5px;"></i>归档</a></li>
         <li class="layui-nav-item "><a href="/fore/about/page" style="font-size: 17px;"><i class="layui-icon layui-icon-more" style="padding-right: 5px;"></i>关于</a></li>
     </ul>
 </div>
 <!--主体-->
 <div class="layui-row " style="padding-top: 20px;padding-bottom: 20px;">
     <div class="layui-col-lg8 layui-col-lg-offset2" style="padding: 10px;">
-        <div class="layui-card " style="padding: 50px;min-height: 500px" >
+        <div class="layui-card animated bounceInUp" style="padding: 50px;min-height: 500px" >
             <div class="layui-card-header">
-                <h2 th:text="${currentTag.name}"></h2>
+                <i class="layui-icon layui-icon-note"></i><span style="font-size: 18px;color: rgb(95,184,120)" th:text="' # '+${currentTag.name}"></span>
             </div>
             <div class="layui-card-body">
-                <div class="layui-row">
-                    <div class="layui-row layui-anim layui-anim-upbit" style="text-align: center" th:if="${currentTag.number} eq 0">
-                        <div class="layui-row" style="padding-top: 100px;padding-bottom: 50px;" >
-                            <i class="layui-icon layui-icon-face-surprised" style="font-size: 200px;color:#00BE67;"></i>
-                        </div>
-                        <div class="layui-row">
-                            <span>作者很懒，什么都没有写~</span>
-                        </div>
-                    </div>
-                    <ul class="layui-timeline" id="previewModule" style="display: none">
-                        <!--简略信息模块-->
-                        <li class="layui-timeline-item layui-anim layui-anim-upbit" v-for="item in items">
-                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
-                            <div class="layui-timeline-content layui-text">
-                                <fieldset class="layui-elem-field layui-timeline-title">
-                                    <legend><a style="color: rgb(102,102,102)"  v-bind:href="'/fore/article/page/'+item.id">{{item.title}}</a></legend>
-                                    <div class="layui-field-box">
-                                        <div class="layui-row">
-                                            <div class="layui-col-lg2">
-                                                <i class="layui-icon layui-icon-date" style="padding-right: 5px;"></i><span>{{item.createBy}}</span>
-                                            </div>
-                                            <div class="layui-col-lg1">
-                                                <i class="iconfont icon-eye" style="padding-right: 5px;"></i><span>{{item.traffic}}</span>
-                                            </div>
-                                            <div class="layui-col-lg6">
-                                                <i class="layui-icon layui-icon-note" style="padding-right: 5px;"></i>
-                                                <a style="color:rgb(102,102,102) " v-for="tagItem in item.tagList" v-bind:href="'/fore/article/tag/page?tagName='+tagItem">{{tagItem}}  </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
+                <div class="layui-row" style="display: none" id="previewDiv">
+                    <div class="layui-row">
+                        <div class="layui-row layui-anim layui-anim-upbit" style="text-align: center" th:if="${currentTag.number} eq 0">
+                            <div class="layui-row" style="padding-top: 100px;padding-bottom: 50px;" >
+                                <i class="layui-icon layui-icon-face-surprised" style="font-size: 200px;color:#00BE67;"></i>
                             </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="layui-row" style="text-align: center;display: none;" id="pageSpliterDiv">
-                    <div id="pageSpliter"></div>
+                            <div class="layui-row">
+                                <span>作者很懒，什么都没有写~</span>
+                            </div>
+                        </div>
+                        <ul class="layui-timeline" id="previewModule">
+                            <!--简略信息模块-->
+                            <transition-group name="list-complete"
+                                              appear
+                                              appear-active-class="animated zoomInUp"
+                                              enter-active-class="animated zoomInUp">
+                                <li class="layui-timeline-item list-complete-item" v-for="item in items" v-bind:key="item">
+                                    <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                    <div class="layui-timeline-content layui-text">
+                                        <fieldset class="layui-elem-field layui-timeline-title">
+                                            <legend><a style="color: rgb(102,102,102)"  v-bind:href="'/fore/article/page/'+item.id">{{item.title}}</a></legend>
+                                            <div class="layui-field-box">
+                                                <div class="layui-row">
+                                                    <div class="layui-col-lg2">
+                                                        <i class="layui-icon layui-icon-date" style="padding-right: 5px;"></i><span>{{item.createBy}}</span>
+                                                    </div>
+                                                    <div class="layui-col-lg1">
+                                                        <i class="iconfont icon-eye" style="padding-right: 5px;"></i><span>{{item.traffic}}</span>
+                                                    </div>
+                                                    <div class="layui-col-lg6">
+                                                        <i class="layui-icon layui-icon-note" style="padding-right: 5px;"></i>
+                                                        <a style="color:rgb(102,102,102) " v-for="tagItem in item.tagList" v-bind:href="'/fore/article/tag/page?tagName='+tagItem">{{tagItem}}  </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </li>
+                            </transition-group>
+                        </ul>
+                    </div>
+                    <div class="layui-row" style="text-align: center;" id="pageSpliterDiv">
+                        <div id="pageSpliter"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -72,14 +91,14 @@
     <div class="layui-col-lg4 layui-col-lg-offset4" style="padding: 20px;text-align: center;line-height: 25px;">
         <span >@CopyRight 2019 ZhouJianGuo版权所有</span>
         <br>
-        <a href="http://beian.miit.gov.cn"><span style="color: white">苏ICP备19061991号</span></a>
+        <a target="_blank" href="http://beian.miit.gov.cn"><span style="color: white">苏ICP备19061991号</span></a>
     </div>
 </div>
 <!--script配置-->
 <script opacity="0.9"  src="/fore/assets/js/canvas-nest.js"></script>
-<script src="/fore/assets/js/vue.js"></script>
+<script src="/fore/assets/js/vue.min.js"></script>
 <script src="/fore/assets/layui.js"></script>
-<script>
+<script th:inline="javascript">
     layui.use(['util','laypage'],function () {
         var util=layui.util;
         util.fixbar({
@@ -93,21 +112,21 @@
         var layer=layui.layer;
         var total=[[${currentTag.number}]]
         var pageSize=[[${pageSize}]]
-        var tagName='[[${currentTag.name}]]'
+        var tagName=[[${currentTag.name}]]
         var previewModule=null;
         laypage.render({
             elem:'pageSpliter',
             curr:1,
             count:total,
             limit:pageSize,
+            layout:['prev','page','next','skip','count'],
             jump:function (obj,first) {
-                $("#previewModule").fadeOut(0)
                 $.ajax({
                     dataType:'json',
                     type:'get',
                     url:'/fore/tag/article/list/'+tagName+'/'+obj.curr,
                     success:function (result) {
-                        // layer.msg(JSON.stringify(result))
+                        $("#previewDiv").show()
                         if(result.code==200){
                             if(first){
                                 previewModule=new Vue({
@@ -116,11 +135,9 @@
                                         items:result.pageInfo.list
                                     }
                                 })
-                                $('#pageSpliterDiv').fadeIn();
                             }else{
                                 previewModule.items=result.pageInfo.list
                             }
-                            $('#previewModule').fadeIn(0)
                         }
                     }
                 })

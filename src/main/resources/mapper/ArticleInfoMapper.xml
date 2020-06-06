@@ -195,6 +195,9 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="queryMonths"  resultType="java.lang.String">
-    select DATE_FORMAT(create_by,'%Y年%m月') from tbl_article_info group by  DATE_FORMAT(create_by,'%Y-%m');
+    select DATE_FORMAT(create_by,'%Y年%m月') from tbl_article_info group by  DATE_FORMAT(create_by,'%Y-%m') order by create_by desc
+  </select>
+  <select id="countMonths" resultType="java.lang.Integer">
+    select count(*) from (select create_by from tbl_article_info group by  DATE_FORMAT(create_by,'%Y-%m')) as a
   </select>
 </mapper>

@@ -11,7 +11,9 @@ import com.zjg.blog.service.TagInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TagInfoServiceImpl implements TagInfoService {
@@ -35,6 +37,11 @@ public class TagInfoServiceImpl implements TagInfoService {
     }
 
     @Override
+    public List<Map<String, Object>> selectTagCloud() {
+        return tagInfoMapper.selectNameAndNumber();
+    }
+
+    @Override
     public int deleteTagById(long id) {
         ArticleTagExample articleTagExample=new ArticleTagExample();
         articleTagExample.createCriteria().andTagIdEqualTo(id);
@@ -44,9 +51,11 @@ public class TagInfoServiceImpl implements TagInfoService {
     }
 
     @Override
-    public PageInfo queryTagInfos(int pageNum, int pageSize) {
+    public PageInfo queryTagInfos(int pageNum, int pageSize,String searchValue,String orderProperty,String orderDirection) {
         TagInfoExample tagInfoExample=new TagInfoExample();
-        tagInfoExample.setOrderByClause("create_by desc");
+        tagInfoExample.setOrderByClause(orderProperty+" "+orderDirection);
+        tagInfoExample.createCriteria()
+                .andNameLike("%"+searchValue+"%");
         PageHelper.startPage(pageNum,pageSize);
         List<TagInfo> daoList=tagInfoMapper.selectByExample(tagInfoExample);
         PageInfo<TagInfo> daoPageInfo=new PageInfo<>(daoList);
@@ -66,6 +75,18 @@ public class TagInfoServiceImpl implements TagInfoService {
         tagInfoExample.createCriteria().andNameLike("%"+tagName+"%");
         List<TagInfo> tagInfoList=tagInfoMapper.selectByExample(tagInfoExample);
         return tagInfoList;
+    }
+
+    /**
+     * 创建新的标签信息功能
+     * create 2020年4月2日14:43:26
+     * author zjg
+     */
+    @Override
+    public int addTagInfo(TagInfo tagInfo) {
+        tagInfo.setNumber(0L);
+        tagInfo.setCreateBy(new Date());
+        return tagInfoMapper.insert(tagInfo);
     }
 
     @Override

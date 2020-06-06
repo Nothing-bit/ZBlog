@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
 @Repository
 public interface ArticleCommentMapper {
     long countByExample(ArticleCommentExample example);
@@ -30,4 +29,5 @@ public interface ArticleCommentMapper {
     int updateByPrimaryKeySelective(ArticleComment record);
 
     int updateByPrimaryKey(ArticleComment record);
+
 }

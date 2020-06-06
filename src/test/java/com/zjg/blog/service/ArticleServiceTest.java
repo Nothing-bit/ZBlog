@@ -2,7 +2,7 @@ package com.zjg.blog.service;
 
 import cn.hutool.core.date.DateUtil;
 import com.zjg.blog.BlogApplicationTests;
-import com.zjg.blog.dto.ArticleViewDto;
+import com.zjg.blog.dto.ArticleView;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class ArticleServiceTest extends BlogApplicationTests {
     }
     @Test
     public void insert(){
-        ArticleViewDto viewDto=new ArticleViewDto();
+        ArticleView viewDto=new ArticleView();
         viewDto.setCategoryId(2);
         viewDto.setContent("这是测试content");
         viewDto.setTitle("测试title");
@@ -50,7 +50,7 @@ public class ArticleServiceTest extends BlogApplicationTests {
     }
     @Test
     public void update(){
-        ArticleViewDto viewDto=new ArticleViewDto();
+        ArticleView viewDto=new ArticleView();
         viewDto.setId(54);
         viewDto.setCategoryId(2);
         viewDto.setContent("这是测试content update");

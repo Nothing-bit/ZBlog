@@ -129,4 +129,7 @@
       create_by = #{createBy,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="selectNameAndNumber" resultType="HashMap">
+    SELECT name,number as value FROM blog.tbl_tag_info
+  </select>
 </mapper>

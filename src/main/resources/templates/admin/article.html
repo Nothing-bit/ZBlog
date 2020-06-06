@@ -41,6 +41,11 @@
         <script src="/admin/assets/js/html5shiv.min.js"></script>
         <script src="/admin/assets/js/respond.min.js"></script>
         <![endif]-->
+		<style>
+			.highlight {
+				background-color: skyblue;
+			}
+		</style>
 	</head>
 
 	<body class="no-skin">
@@ -343,16 +348,23 @@
 								<div>
 									<table id="table" class="table table-striped table-bordered table-hover" style='text-align: center'>
 										<thead>
-											<td><span>id</span></td>
-											<td><span>标题</span></td>
-											<td><span>简介</span></td>
-											<td><span>所属分类</span></td>
-											<td><span>置顶</span></td>
-											<td><span>隐藏</span></td>
-											<td><span>点击量</span></td>
-											<td><span>创建时间</span></td>
-											<td><span>操作</span></td>
+											<th class="center">
+												<label class="pos-rel">
+													<input type="checkbox" class="ace" />
+													<span class="lbl"></span>
+												</label>
+											</th>
+											<th style="text-align: center"><span>ID</span></th>
+											<th style="text-align: center"><span>标题</span></th>
+											<th style="text-align: center"><span>简介</span></th>
+											<th style="text-align: center"><span>所属分类</span></th>
+											<th style="text-align: center"><span>置顶</span></th>
+											<th style="text-align: center"><span>隐藏</span></th>
+											<th style="text-align: center"><span>点击量</span></th>
+											<th style="text-align: center"><span>创建时间</span></th>
+											<th style="text-align: center"><span>操作</span></th>
 										</thead>
+										<tbody></tbody>
 									</table>
 								</div>
 							</div>
@@ -414,9 +426,11 @@
 		<script src="/admin/assets/js/sweetalert-dev.js"></script>
 		<script src="/admin/ckeditor/ckeditor.js"></script>
 		<script src="/admin/assets/js/bootstrap-tag.min.js"></script>
+		<script src="/admin/assets/js/jquery.highlight.js"></script>
 
 		<!--page sources scripts-->
 		<script type="text/javascript">
+			//删除指定id的文章
 			function deleteArticle(id) {
 				swal({
 					title:'注意',
@@ -438,6 +452,7 @@
 							success:function (data) {
 								if(data.code==200){
 									swal("成功", "id为"+id+"的文章已被成功删除","success");
+									$("#table > thead > tr > th >label >input[type=checkbox]").prop('checked', false)
 									dataTable.ajax.reload();
 								}
 							}
@@ -446,17 +461,15 @@
 			}
 
 			var dataTable = $('#table').DataTable( {
-				jQueryUI: true,
-				autoWidth:false,
-				destroy:true,
-				ordering:false,
-				searching:false,
+				ordering:true,
+				searching:true,
 				serverSide:true,
 				ajax:{
 					url:'/admin/article/list',
 					type:'get'
 				},
 				columns:[
+					{data:null},
 					{data:'id'},
 					{data:'title'},
 					{data:'summary'},
@@ -464,11 +477,24 @@
 					{data:'top'},
 					{data:'privated'},
 					{data:'traffic'},
-					{data:'createBy'}
+					{data:'createBy'},
+					{data:null}
 				],
 				columnDefs:[
+					{//这个就是用来画第一列的小方块多选框的
+						targets : 0,
+						searchable : false,
+						orderable : false,
+						render : function(data, type, row) {
+							var html="<label class='pos-rel'>"
+							html+="<input type='checkbox'class='ace' />"
+							html+="<span class='lbl'></span>"
+							html+="</label>"
+							return html;
+						}
+					},
 					{
-						targets:4,
+						targets:5,
 						render:function (data, type, row, meta) {
 							var html=""
 							if(data==true){
@@ -480,7 +506,7 @@
 						}
 					},
 					{
-						targets:5,
+						targets:6,
 						render:function (data, type, row, meta) {
 							var html=""
 							if(data==true){
@@ -492,7 +518,8 @@
 						}
 					},
 					{
-						targets:8,
+						orderable:false,
+						targets:9,
 						render:function (data, type, row, meta) {
 							var html="<div class='hidden-sm hidden-xs action-buttons'>\
 									<a class='green' onclick='initUpdate("+row.id+")'><i class='ace-icon fa fa-pencil bigger-130'></i></a>\
@@ -501,7 +528,13 @@
 							return html;
 						}
 					}
+
 				],
+				select : {
+					style : 'multi',
+					selector:'td:checkbox'
+				},
+				order:[1,'desc'],
 				lengthMenu: [ 5, 10, 20 ],
 				language:{
 					"decimal":        "",
@@ -514,7 +547,7 @@
 					"lengthMenu":     "显示 _MENU_ 条数据",
 					"loadingRecords": "加载中...",
 					"processing":     "处理中...",
-					"search":         "查找:",
+					"search":         "查找(标题):",
 					"zeroRecords":    "未能找到相关数据",
 					"paginate": {
 						"first":      "首页",
@@ -538,11 +571,55 @@
 					},
 					{
 						"text": "<i class='fa fa-plus' ></i> <span class='hidden'>添加新文章</span>",
-						"className": "btn btn-white btn-primary btn-bold",
+						"className": "btn btn-white btn-success btn-bold",
 						"action":function () {
 							initCategorySelect($("#addCategoryId"))
 							$("#dataTableDiv").fadeOut(500)
 							$("#addArticleDiv").fadeIn(500)
+						}
+					},
+					{
+						"text":"<i class='fa fa-trash' ></i> <span class='hidden'>批量删除</span>",
+						"className": "btn btn-white btn-danger btn-bold",
+						"action":function(){//删除
+							var array = new Array();
+							array = dataTable.rows({selected : true}).data().toArray();
+							if(array.length==0){//如果一个没有勾选
+								swal({    //提示框
+									title : "批量删除失败",
+									text : "请先勾选需要删除的数据",
+									type : "error",
+									showConfirmButton : true,
+								});
+							}else{
+								swal({
+									title : "批量删除",
+									text : "即将批量删除所选文章!",
+									type : "warning",
+									showCancelButton : true,
+									confirmButtonColor: "#DD6B55",
+									confirmButtonText : "确定删除",
+									cancelButtonText : "取消删除",
+									closeOnConfirm : false,
+								}, function() {
+									for (var i = 0; i < array.length; i++) {
+										$.ajax({
+											type:'delete',
+											dataType:'json',
+											url:'/admin/article/'+array[i].id,
+											async:false,
+											success:function (data) {
+												if(data.code!=200){
+													swal("出错啦！","批量删除文章时出错！","error")
+												}
+											}
+										})//确定删除，则执行删除函数
+										dataTable.ajax.reload()
+										$("#table > thead > tr > th >label >input[type=checkbox]").prop('checked', false)
+										swal("删除成功","批量删除："+array.length+"篇文章成功！","success")
+									}
+								});
+							}
 						}
 					}
 				]
@@ -571,9 +648,34 @@
 				});
 			}, 500);
 
+			//table checkboxes
+			$('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
+
+			//select/deselect all rows according to table header checkbox
+			$('#table > thead > tr > th input[type=checkbox], #table_wrapper input[type=checkbox]').eq(0).on('click', function(){
+				var th_checked = this.checked;//checkbox inside "TH" table header
+				if(th_checked){
+					$('td input[type=checkbox]').prop('checked',true);
+				}else{
+					$('td input[type=checkbox]').prop('checked',false);
+				}
+
+				$('#table').find('tbody > tr').each(function(){
+					var row = this;
+					if(th_checked) dataTable.row(row).select();
+					else  dataTable.row(row).deselect();
+				});
+			});
+
+			//select/deselect a row when the checkbox is checked/unchecked
+			$('#table').on('click', 'td input[type=checkbox]' , function(){
+				var row = $(this).closest('tr').get(0);
+				if(this.checked) dataTable.row(row).select();
+				else dataTable.row(row).deselect();
+			});
 
 
- //  markdown 插件部分
+			//  markdown 插件部分
 			//add部分
 			function submitAdd(){
 				swal({
@@ -608,9 +710,13 @@
 										url:'/admin/article',
 										success:function (result) {
 											if(result.code==200){
-												swal("成功","文章发布成功！","success")
-												dataTable.ajax.reload();
-												returnBack($("#addArticleDiv"))
+												swal({
+													title:'成功',
+													text:'新增文章成功！',
+													type:'success'
+												},function(isConfirm){
+													location.reload();
+												})
 											}
 										}
 
@@ -685,9 +791,13 @@
                                 url:'/admin/article/'+$("#updateId").val(),
                                 success:function (result) {
                                     if(result.code==200){
-                                        swal("成功","提交修改成功！","success")
-                                        dataTable.ajax.reload();
-                                        returnBack($("#updateArticleDiv"))
+                                    	swal({
+											title:'成功',
+											text:'提交修改成功！',
+											type:'success'
+										},function(isConfirm){
+                                    		location.reload();
+										})
                                     }
                                 }
 
@@ -726,7 +836,7 @@
 				$.ajax({
 					dataType:'json',
 					type:'get',
-					url:'/fore/category/list',
+					url:'/admin/category/all',
 					success:function (data) {
 						//	alert(JSON.stringify(data))
 						if(data.code==200){
@@ -823,6 +933,12 @@
 				updateTags.after('<textarea id="' + updateTags.attr('id') + '" name="' + updateTags.attr('name') + '" rows="3">' + updateTags.val() + '</textarea>').remove();
 				//autosize($('#updateTags'));
 			}
+			//search highlight
+			dataTable.on('draw', function () {
+				var body = $(dataTable.table().body());
+				body.unhighlight();
+				body.highlight(dataTable.search());
+			});
 		</script>
 	</body>
 </html>

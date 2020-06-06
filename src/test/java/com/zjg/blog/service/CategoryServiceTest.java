@@ -1,6 +1,5 @@
 package com.zjg.blog.service;
 
-import com.alibaba.fastjson.JSONArray;
 import com.zjg.blog.BlogApplicationTests;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,8 +10,6 @@ public class CategoryServiceTest extends BlogApplicationTests {
     private CategoryInfoService service;
     @Test
     public void queryAll(){
-        String str= JSONArray.toJSONString(service.queryAllCategory());
-        System.out.println(str);
     }
     @Test
     public void count(){

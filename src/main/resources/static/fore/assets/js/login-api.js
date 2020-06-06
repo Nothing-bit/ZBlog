@@ -67,8 +67,7 @@ function logout() {
  * 回复某一用户
  * @param targetId
  */
-function reply(id,username) {
-    $("#targetId").val(id)
+function reply(username) {
     layer.open({
         type: 1,
         skin: 'layui-layer-demo', //样式类名
@@ -76,7 +75,7 @@ function reply(id,username) {
         anim: 3,
         title:'回复：'+username,
         shadeClose: true, //开启遮罩关闭
-        area: ['600px', '300px'],
+        area: ['600px', '450px'],
         content: $('#replyModal')
     });
 
